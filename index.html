@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="比特币导航 - 精选比特币相关工具与资源">
+    <meta name="keywords" content="比特币,Bitcoin,BTC,导航,工具">
+    <title>比特币导航 - Bitcoin Navigation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 微信浏览器警告提示 -->
+    <div id="wechat-warning" class="wechat-warning hidden">
+        <div class="warning-content">
+            <div class="warning-icon">⚠️</div>
+            <h3>请使用独立浏览器打开</h3>
+            <p>为了获得最佳体验和安全性，请点击右上角「···」选择「在浏览器中打开」</p>
+            <button class="close-btn" onclick="closeWarning()">我知道了</button>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 页面头部 -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="btc-icon">₿</span>
+                    <h1>比特币导航</h1>
+                </div>
+                <p class="subtitle">Bitcoin Navigation - 精选比特币工具与资源</p>
+            </div>
+        </header>
+
+        <!-- 导航卡片区域 -->
+        <main class="main-content">
+            <div class="cards-grid">
+                <!-- 卡片1：AHR999定投指数 -->
+                <a href="https://ahr.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">比特币 AHR999 定投指数</h3>
+                    <p class="card-description">自动获取并展示 AHR999 囤比特币指标数据的投资参考</p>
+                    <div class="card-footer">
+                        <span class="card-link">访问工具 →</span>
+                    </div>
+                </a>
+
+                <!-- 卡片2：比特币白皮书 -->
+                <a href="https://paper.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon">📄</div>
+                    <h3 class="card-title">比特币白皮书</h3>
+                    <p class="card-description">保持原文基础上，扩展更多内容、技术概念、演示等</p>
+                    <div class="card-footer">
+                        <span class="card-link">阅读白皮书 →</span>
+                    </div>
+                </a>
+
+                <!-- 卡片3：比特币百科 -->
+                <a href="https://wiki.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon">📚</div>
+                    <h3 class="card-title">比特币百科</h3>
+                    <p class="card-description">关于比特币技术细节、概念的丰富解释</p>
+                    <div class="card-footer">
+                        <span class="card-link">探索百科 →</span>
+                    </div>
+                </a>
+
+                <!-- 卡片4：助记词离线生成 -->
+                <a href="https://bip.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
+                    <div class="card-icon">🔐</div>
+                    <h3 class="card-title">比特币助记词离线生成</h3>
+                    <p class="card-description">可以断网离线生成基于 BIP39 标准生成的助记词，安全放心</p>
+                    <div class="card-footer">
+                        <span class="card-link">生成助记词 →</span>
+                    </div>
+                </a>
+
+                <!-- 预留卡片位置 - 占位符1 -->
+                <div class="card card-placeholder">
+                    <div class="card-icon placeholder-icon">➕</div>
+                    <h3 class="card-title">更多工具</h3>
+                    <p class="card-description">敬请期待更多比特币相关工具</p>
+                </div>
+
+                <!-- 预留卡片位置 - 占位符2 -->
+                <div class="card card-placeholder">
+                    <div class="card-icon placeholder-icon">➕</div>
+                    <h3 class="card-title">更多工具</h3>
+                    <p class="card-description">敬请期待更多比特币相关工具</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>© 2024 Bitcoin Navigation. 保持开放，保持自由</p>
+            <p class="footer-note">Bitcoin: A Peer-to-Peer Electronic Cash System</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
