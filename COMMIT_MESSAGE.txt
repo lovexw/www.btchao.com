@@ -1,0 +1,46 @@
+feat: 增强微信浏览器跳转功能支持iOS/Android平台
+
+主要改进：
+
+1. **设备检测增强**
+   - 新增 window.mobileUtil 工具对象
+   - 支持检测 iOS、Android、WeChat、QQ 浏览器
+   - 更精确的平台识别
+
+2. **iOS微信跳转方案**
+   - 可配置跳转服务URL (IOS_JUMP_SERVICE_URL)
+   - 支持自定义中间跳转页面
+   - 默认提供引导式手动打开
+
+3. **Android微信跳转方案**
+   - 方法1: 模拟文件下载触发浏览器切换
+   - 方法2: iframe加载 ?open=1 参数页面
+   - 方法3: window.open 作为fallback
+   - 多层降级策略提高成功率
+
+4. **UI优化**
+   - 新增"点此继续访问"按钮（绿色渐变设计）
+   - 根据平台动态更新操作提示文字
+   - iOS显示"在Safari中打开"
+   - Android显示"在浏览器中打开"
+   - 三按钮布局：继续访问、复制网址、我知道了
+
+5. **样式改进**
+   - continue-btn: 绿色渐变 (#4CAF50)
+   - 增强hover效果和交互反馈
+   - 移动端完全响应式支持
+
+6. **文档完善**
+   - README.md 更新功能说明
+   - 新增 WECHAT_JUMP_CONFIG.md 配置指南
+   - 新增测试页面 test-wechat-detection.html
+
+技术实现：
+- 参考PHP跳转逻辑，改造为纯JavaScript方案
+- 无需后端支持，纯静态部署
+- 兼容性fallback策略确保各平台体验
+
+测试建议：
+- iOS微信：测试Safari跳转
+- Android微信：测试浏览器唤起
+- 桌面浏览器：确认无警告弹窗

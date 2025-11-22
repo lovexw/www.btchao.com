@@ -1,7 +1,23 @@
+// 移动设备和浏览器检测工具
+window.mobileUtil = (function(win, doc) {
+    const UA = navigator.userAgent,
+    isAndroid = /android|adr/gi.test(UA),
+    isIOS = /iphone|ipod|ipad/gi.test(UA) && !(/android|adr/gi.test(UA)),
+    isBlackBerry = /BlackBerry/i.test(UA),
+    isWindowPhone = /IEMobile/i.test(UA),
+    isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+    return {
+        isAndroid: isAndroid,
+        isIOS: isIOS,
+        isMobile: isMobile,
+        isWeixin: /MicroMessenger/gi.test(UA),
+        isQQ: /QQ/gi.test(UA)
+    };
+})(window, document);
+
 // 检测微信浏览器
 function isWeChatBrowser() {
-    const ua = navigator.userAgent.toLowerCase();
-    return /micromessenger/.test(ua);
+    return window.mobileUtil.isWeixin;
 }
 
 // 显示微信浏览器警告
@@ -11,6 +27,21 @@ function showWeChatWarning() {
         warningElement.classList.remove('hidden');
         // 阻止背景滚动
         document.body.style.overflow = 'hidden';
+        
+        // 根据平台设置不同的提示文本
+        updateWarningContent();
+    }
+}
+
+// 根据平台更新警告内容
+function updateWarningContent() {
+    const stepText2 = document.querySelector('.step:nth-child(2) .step-text');
+    if (stepText2) {
+        if (mobileUtil.isIOS) {
+            stepText2.innerHTML = '选择 <strong>「在Safari中打开」</strong>';
+        } else if (mobileUtil.isAndroid) {
+            stepText2.innerHTML = '选择 <strong>「在浏览器中打开」</strong>';
+        }
     }
 }
 
@@ -82,6 +113,91 @@ function showCopySuccessToast(toastElement) {
         setTimeout(() => {
             toastElement.classList.add('hidden');
         }, 3000);
+    }
+}
+
+// 配置：iOS微信跳转服务URL（可选）
+// 如果你有自己的跳转服务，请在这里配置
+// 留空则提示用户手动操作
+const IOS_JUMP_SERVICE_URL = ""; // 例如: "https://your-jump-service.com/jump?url="
+
+// 继续访问 - 尝试跳转到系统浏览器
+function continueToVisit(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const currentUrl = window.location.href.split('?')[0]; // 获取不带参数的URL
+    
+    if (mobileUtil.isWeixin) {
+        if (mobileUtil.isIOS) {
+            // iOS微信：尝试跳转到中间服务或提示用户
+            if (IOS_JUMP_SERVICE_URL) {
+                // 如果配置了跳转服务，使用它
+                const jumpUrl = IOS_JUMP_SERVICE_URL + encodeURIComponent(currentUrl);
+                window.location.href = jumpUrl;
+            } else {
+                // 否则，尝试通过Universal Link或提示用户
+                // 创建一个临时链接尝试打开Safari
+                const tempLink = document.createElement('a');
+                tempLink.href = currentUrl;
+                tempLink.target = '_blank';
+                tempLink.rel = 'noopener noreferrer';
+                document.body.appendChild(tempLink);
+                tempLink.click();
+                document.body.removeChild(tempLink);
+                
+                // 显示提示
+                setTimeout(() => {
+                    alert('请点击右上角「···」菜单，选择「在Safari中打开」');
+                }, 500);
+            }
+            
+        } else if (mobileUtil.isAndroid) {
+            // Android微信：尝试多种方法触发浏览器打开
+            
+            // 方法1：尝试下载触发（模拟文件下载）
+            const downloadLink = document.createElement('a');
+            downloadLink.href = currentUrl + '?download=1';
+            downloadLink.download = 'open.html';
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            
+            // 方法2：iframe方式
+            setTimeout(() => {
+                const iframe = document.createElement("iframe");
+                iframe.style.display = "none";
+                iframe.src = currentUrl + '?open=1';
+                document.body.appendChild(iframe);
+                
+                // 延迟后移除
+                setTimeout(() => {
+                    if (iframe.parentNode) {
+                        document.body.removeChild(iframe);
+                    }
+                }, 3000);
+            }, 500);
+            
+            // 方法3：尝试打开新窗口
+            setTimeout(() => {
+                window.open(currentUrl, '_blank');
+            }, 1000);
+            
+            // 提示用户
+            setTimeout(() => {
+                alert('请点击右上角「···」菜单，选择「在浏览器中打开」');
+            }, 1500);
+            
+            // 清理下载链接
+            setTimeout(() => {
+                if (downloadLink.parentNode) {
+                    document.body.removeChild(downloadLink);
+                }
+            }, 2000);
+        }
+    } else {
+        // 非微信浏览器，关闭警告
+        closeWarning();
     }
 }
 
