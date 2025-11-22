@@ -311,6 +311,9 @@ function toggleCommentsPanel() {
     }
 }
 
+// 确保在全局作用域可访问
+window.toggleCommentsPanel = toggleCommentsPanel;
+
 function initializeWaline() {
     const container = document.getElementById('waline-container');
     if (!container) {
@@ -322,7 +325,7 @@ function initializeWaline() {
             window.Waline.init({
                 el: '#waline-container',
                 serverURL: 'https://ly.btchao.com',
-                path: '/',
+                path: window.location.pathname || '/',
                 placeholder: '留下你的想法...',
                 avatar: 'gravatar',
                 dark: false,
@@ -330,11 +333,17 @@ function initializeWaline() {
                 requiredMeta: [],
                 avatarCDN: 'https://www.gravatar.com/avatar/',
                 pageSize: 10,
-                pageview: false
+                pageview: false,
+                login: 'disable'
             });
         } catch (error) {
             console.error('Waline 初始化错误:', error);
+            // 初始化失败时，尝试在延迟后重试
+            setTimeout(initializeWaline, 2000);
         }
+    } else if (!window.Waline) {
+        // Waline 脚本可能还没加载，延迟重试
+        setTimeout(initializeWaline, 1000);
     }
 }
 

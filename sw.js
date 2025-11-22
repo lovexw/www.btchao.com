@@ -73,12 +73,18 @@ self.addEventListener('fetch', event => {
   // 对于外部服务，直接使用网络请求（不缓存）
   if (isExternalService(url.href)) {
     event.respondWith(
-      fetch(event.request, { credentials: 'omit' })
+      fetch(event.request)
+        .then(response => {
+          // 只返回成功的响应
+          return response;
+        })
         .catch(() => {
-          // 网络请求失败时，返回错误响应而不是抛出异常
-          return new Response('资源加载失败', { 
-            status: 408,
-            statusText: 'Request Timeout'
+          // 网络请求失败时，返回空响应让浏览器处理
+          // 这样可以避免 Service Worker 报错，浏览器会自然处理失败
+          return new Response('', { 
+            status: 0,
+            statusText: '',
+            headers: new Headers({ 'Content-Type': 'application/octet-stream' })
           });
         })
     );
@@ -136,7 +142,12 @@ self.addEventListener('fetch', event => {
     }).catch(() => {
       // 网络失败时尝试使用缓存
       return caches.match(event.request).catch(() => {
-        return new Response('网络连接失败', { status: 408 });
+        // 返回空响应，让浏览器处理
+        return new Response('', { 
+          status: 0,
+          statusText: '',
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        });
       });
     })
   );
