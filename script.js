@@ -1,4 +1,4 @@
-// 移动设备和浏览器检测工具
+// [优先级 1] 移动设备和浏览器检测工具 - 核心功能
 window.mobileUtil = (function(win, doc) {
     const UA = navigator.userAgent,
     isAndroid = /android|adr/gi.test(UA),
@@ -15,25 +15,22 @@ window.mobileUtil = (function(win, doc) {
     };
 })(window, document);
 
-// 检测微信浏览器
+// [优先级 2] 检测微信浏览器 - 安全提示展示
 function isWeChatBrowser() {
     return window.mobileUtil.isWeixin;
 }
 
-// 显示微信浏览器警告
+// [优先级 3] 显示微信浏览器警告 - UI提示
 function showWeChatWarning() {
     const warningElement = document.getElementById('wechat-warning');
     if (warningElement) {
         warningElement.classList.remove('hidden');
-        // 阻止背景滚动
         document.body.style.overflow = 'hidden';
-        
-        // 根据平台设置不同的提示文本
         updateWarningContent();
     }
 }
 
-// 根据平台更新警告内容
+// [优先级 4] 根据平台更新警告内容 - 平台适配
 function updateWarningContent() {
     const stepText2 = document.querySelector('.step:nth-child(2) .step-text');
     if (stepText2) {
@@ -45,17 +42,16 @@ function updateWarningContent() {
     }
 }
 
-// 关闭警告提示
+// [优先级 5] 关闭警告提示 - 用户交互
 function closeWarning() {
     const warningElement = document.getElementById('wechat-warning');
     if (warningElement) {
         warningElement.classList.add('hidden');
-        // 恢复背景滚动
         document.body.style.overflow = '';
     }
 }
 
-// 复制当前网址
+// [优先级 6] 复制当前网址 - 用户功能
 function copyCurrentUrl(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -63,23 +59,20 @@ function copyCurrentUrl(event) {
     const currentUrl = window.location.href;
     const toastElement = document.getElementById('copy-toast');
     
-    // 尝试使用现代 Clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(currentUrl)
             .then(() => {
                 showCopySuccessToast(toastElement);
             })
             .catch((err) => {
-                // 如果失败，尝试传统方法
                 fallbackCopyTextToClipboard(currentUrl, toastElement);
             });
     } else {
-        // 不支持 Clipboard API，使用传统方法
         fallbackCopyTextToClipboard(currentUrl, toastElement);
     }
 }
 
-// 传统复制方法（兼容性更好）
+// [优先级 7] 传统复制方法 - 兼容性支持
 function fallbackCopyTextToClipboard(text, toastElement) {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -93,7 +86,6 @@ function fallbackCopyTextToClipboard(text, toastElement) {
     try {
         const successful = document.execCommand('copy');
         if (successful && toastElement) {
-            // 只在传入toast元素时显示提示
             showCopySuccessToast(toastElement);
         } else if (!successful) {
             console.error('复制失败');
@@ -105,24 +97,20 @@ function fallbackCopyTextToClipboard(text, toastElement) {
     document.body.removeChild(textArea);
 }
 
-// 显示复制成功提示
+// [优先级 8] 显示复制成功提示 - 用户反馈
 function showCopySuccessToast(toastElement) {
     if (toastElement) {
         toastElement.classList.remove('hidden');
-        
-        // 3秒后自动隐藏
         setTimeout(() => {
             toastElement.classList.add('hidden');
         }, 3000);
     }
 }
 
-// 配置：iOS微信跳转服务URL（可选）
-// 如果你有自己的跳转服务，请在这里配置
-// 留空则提示用户手动操作
-const IOS_JUMP_SERVICE_URL = ""; // 例如: "https://your-jump-service.com/jump?url="
+// [优先级 9] 配置：iOS微信跳转服务URL - 可选配置
+const IOS_JUMP_SERVICE_URL = "";
 
-// 继续访问 - 尝试跳转到系统浏览器
+// [优先级 10] 继续访问 - 尝试跳转到系统浏览器 - 核心跳转逻辑
 function continueToVisit(event) {
     event.preventDefault();
     event.stopPropagation();
@@ -197,21 +185,18 @@ function continueToVisit(event) {
     }
 }
 
-// 静默复制URL（不显示提示）
+// [优先级 11] 静默复制URL - 后台功能
 function copyUrlSilently(url) {
-    // 尝试使用现代 Clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(url).catch(() => {
-            // 失败时使用传统方法
             fallbackCopyTextToClipboard(url, null);
         });
     } else {
-        // 不支持 Clipboard API，使用传统方法
         fallbackCopyTextToClipboard(url, null);
     }
 }
 
-// 页面加载时检测浏览器
+// [优先级 12] 页面加载时检测浏览器 - 初始化
 document.addEventListener('DOMContentLoaded', function() {
     if (isWeChatBrowser()) {
         showWeChatWarning();
