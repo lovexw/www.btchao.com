@@ -92,9 +92,10 @@ function fallbackCopyTextToClipboard(text, toastElement) {
     
     try {
         const successful = document.execCommand('copy');
-        if (successful) {
+        if (successful && toastElement) {
+            // 只在传入toast元素时显示提示
             showCopySuccessToast(toastElement);
-        } else {
+        } else if (!successful) {
             console.error('复制失败');
         }
     } catch (err) {
@@ -126,7 +127,7 @@ function continueToVisit(event) {
     event.preventDefault();
     event.stopPropagation();
     
-    const currentUrl = window.location.href.split('?')[0]; // 获取不带参数的URL
+    const currentUrl = window.location.href;
     
     if (mobileUtil.isWeixin) {
         if (mobileUtil.isIOS) {
@@ -152,52 +153,61 @@ function continueToVisit(event) {
                 }, 500);
             }
             
+            // iOS也自动复制链接，方便用户手动粘贴
+            copyUrlSilently(currentUrl);
+            
         } else if (mobileUtil.isAndroid) {
-            // Android微信：尝试多种方法触发浏览器打开
-            
-            // 方法1：尝试下载触发（模拟文件下载）
-            const downloadLink = document.createElement('a');
-            downloadLink.href = currentUrl + '?download=1';
-            downloadLink.download = 'open.html';
-            downloadLink.style.display = 'none';
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            
-            // 方法2：iframe方式
-            setTimeout(() => {
-                const iframe = document.createElement("iframe");
-                iframe.style.display = "none";
-                iframe.src = currentUrl + '?open=1';
-                document.body.appendChild(iframe);
+            // Android微信：使用intent协议尝试调起Chrome浏览器
+            // 这是最可靠的方法，可以直接调起系统默认浏览器或Chrome
+            try {
+                // 移除协议头，构造intent URL
+                const urlWithoutProtocol = currentUrl.replace(/^https?:\/\//i, '');
+                const scheme = currentUrl.startsWith('https') ? 'https' : 'http';
                 
-                // 延迟后移除
+                // 方法1：使用intent协议尝试调起Chrome
+                const intentUrl = `intent://${urlWithoutProtocol}#Intent;scheme=${scheme};package=com.android.chrome;end`;
+                window.location.href = intentUrl;
+                
+                // 备用方案：尝试调起系统默认浏览器
                 setTimeout(() => {
-                    if (iframe.parentNode) {
-                        document.body.removeChild(iframe);
-                    }
-                }, 3000);
-            }, 500);
+                    const intentUrlDefault = `intent://${urlWithoutProtocol}#Intent;scheme=${scheme};action=android.intent.action.VIEW;end`;
+                    window.location.href = intentUrlDefault;
+                }, 800);
+                
+                // 方法2：尝试使用window.open作为备用
+                setTimeout(() => {
+                    window.open(currentUrl, '_blank');
+                }, 1500);
+                
+            } catch (err) {
+                console.error('Intent调用失败:', err);
+            }
             
-            // 方法3：尝试打开新窗口
-            setTimeout(() => {
-                window.open(currentUrl, '_blank');
-            }, 1000);
+            // 自动复制链接到剪贴板，方便用户手动粘贴
+            copyUrlSilently(currentUrl);
             
-            // 提示用户
+            // 延迟提示用户
             setTimeout(() => {
-                alert('请点击右上角「···」菜单，选择「在浏览器中打开」');
-            }, 1500);
-            
-            // 清理下载链接
-            setTimeout(() => {
-                if (downloadLink.parentNode) {
-                    document.body.removeChild(downloadLink);
-                }
+                alert('链接已复制！如未自动打开，请点击右上角「···」菜单，选择「在浏览器中打开」或手动粘贴链接到浏览器访问');
             }, 2000);
         }
     } else {
         // 非微信浏览器，关闭警告
         closeWarning();
+    }
+}
+
+// 静默复制URL（不显示提示）
+function copyUrlSilently(url) {
+    // 尝试使用现代 Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).catch(() => {
+            // 失败时使用传统方法
+            fallbackCopyTextToClipboard(url, null);
+        });
+    } else {
+        // 不支持 Clipboard API，使用传统方法
+        fallbackCopyTextToClipboard(url, null);
     }
 }
 
