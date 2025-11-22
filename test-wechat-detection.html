@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>微信检测测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .pass {
+            background: #d4edda;
+            color: #155724;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 6px;
+            border: none;
+        }
+        .test-btn {
+            background: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>微信浏览器跳转功能测试</h1>
+    
+    <div class="test-section">
+        <h2>1. 设备检测测试</h2>
+        <button class="test-btn" onclick="testDeviceDetection()">运行测试</button>
+        <div id="device-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. 函数存在性测试</h2>
+        <button class="test-btn" onclick="testFunctionExists()">运行测试</button>
+        <div id="function-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. 模拟微信浏览器</h2>
+        <p>注意：这只是模拟测试，实际效果需要在真实微信浏览器中验证</p>
+        <button class="test-btn" onclick="simulateWeChatIOS()">模拟 iOS 微信</button>
+        <button class="test-btn" onclick="simulateWeChatAndroid()">模拟 Android 微信</button>
+        <div id="simulate-result"></div>
+    </div>
+
+    <!-- 引入主脚本 -->
+    <script src="script.js"></script>
+    
+    <!-- 测试脚本 -->
+    <script>
+        function testDeviceDetection() {
+            const result = document.getElementById('device-result');
+            const util = window.mobileUtil;
+            
+            if (!util) {
+                result.innerHTML = '<div class="test-result" style="background: #f8d7da; color: #721c24;">❌ mobileUtil 未定义</div>';
+                return;
+            }
+            
+            result.innerHTML = `
+                <div class="test-result pass">✅ mobileUtil 已定义</div>
+                <div class="test-result info">
+                    <strong>检测结果：</strong><br>
+                    - isAndroid: ${util.isAndroid}<br>
+                    - isIOS: ${util.isIOS}<br>
+                    - isMobile: ${util.isMobile}<br>
+                    - isWeixin: ${util.isWeixin}<br>
+                    - isQQ: ${util.isQQ}<br>
+                    - User Agent: ${navigator.userAgent}
+                </div>
+            `;
+        }
+
+        function testFunctionExists() {
+            const result = document.getElementById('function-result');
+            const functions = [
+                'isWeChatBrowser',
+                'showWeChatWarning',
+                'updateWarningContent',
+                'closeWarning',
+                'continueToVisit',
+                'copyCurrentUrl'
+            ];
+            
+            let html = '';
+            let allPassed = true;
+            
+            functions.forEach(funcName => {
+                const exists = typeof window[funcName] === 'function';
+                if (exists) {
+                    html += `<div class="test-result pass">✅ ${funcName}() 存在</div>`;
+                } else {
+                    html += `<div class="test-result" style="background: #f8d7da; color: #721c24;">❌ ${funcName}() 不存在</div>`;
+                    allPassed = false;
+                }
+            });
+            
+            result.innerHTML = html;
+        }
+
+        function simulateWeChatIOS() {
+            const result = document.getElementById('simulate-result');
+            result.innerHTML = `
+                <div class="test-result info">
+                    <strong>iOS 微信模拟</strong><br>
+                    在真实的 iOS 微信浏览器中，点击"点此继续访问"按钮会：<br>
+                    1. 如果配置了 IOS_JUMP_SERVICE_URL，会跳转到跳转服务<br>
+                    2. 否则，尝试打开新窗口并显示引导提示<br>
+                    <br>
+                    当前配置的跳转服务URL: <code>${typeof IOS_JUMP_SERVICE_URL !== 'undefined' ? IOS_JUMP_SERVICE_URL || '(未配置)' : '(变量未找到)'}</code>
+                </div>
+            `;
+        }
+
+        function simulateWeChatAndroid() {
+            const result = document.getElementById('simulate-result');
+            result.innerHTML = `
+                <div class="test-result info">
+                    <strong>Android 微信模拟</strong><br>
+                    在真实的 Android 微信浏览器中，点击"点此继续访问"按钮会：<br>
+                    1. 尝试下载触发（模拟文件下载）<br>
+                    2. 通过 iframe 加载带 ?open=1 参数的页面<br>
+                    3. 使用 window.open 打开新窗口<br>
+                    4. 显示操作引导弹窗<br>
+                    <br>
+                    注意：由于是纯静态网站，效果可能因微信版本而异
+                </div>
+            `;
+        }
+
+        // 页面加载时自动运行基础测试
+        window.addEventListener('load', function() {
+            testDeviceDetection();
+            testFunctionExists();
+        });
+    </script>
+</body>
+</html>
