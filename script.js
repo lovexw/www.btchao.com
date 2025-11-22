@@ -24,6 +24,67 @@ function closeWarning() {
     }
 }
 
+// 复制当前网址
+function copyCurrentUrl(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const currentUrl = window.location.href;
+    const toastElement = document.getElementById('copy-toast');
+    
+    // 尝试使用现代 Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(currentUrl)
+            .then(() => {
+                showCopySuccessToast(toastElement);
+            })
+            .catch((err) => {
+                // 如果失败，尝试传统方法
+                fallbackCopyTextToClipboard(currentUrl, toastElement);
+            });
+    } else {
+        // 不支持 Clipboard API，使用传统方法
+        fallbackCopyTextToClipboard(currentUrl, toastElement);
+    }
+}
+
+// 传统复制方法（兼容性更好）
+function fallbackCopyTextToClipboard(text, toastElement) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.top = '-9999px';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopySuccessToast(toastElement);
+        } else {
+            console.error('复制失败');
+        }
+    } catch (err) {
+        console.error('复制出错:', err);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+// 显示复制成功提示
+function showCopySuccessToast(toastElement) {
+    if (toastElement) {
+        toastElement.classList.remove('hidden');
+        
+        // 3秒后自动隐藏
+        setTimeout(() => {
+            toastElement.classList.add('hidden');
+        }, 3000);
+    }
+}
+
 // 页面加载时检测浏览器
 document.addEventListener('DOMContentLoaded', function() {
     if (isWeChatBrowser()) {
@@ -45,14 +106,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 点击背景关闭警告
+    // 点击背景关闭警告（已通过 onclick 处理）
+    // 但保持兼容性代码
     const warningElement = document.getElementById('wechat-warning');
     if (warningElement) {
-        warningElement.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeWarning();
-            }
-        });
+        // 阻止警告内容区域的点击事件冒泡
+        const warningContent = warningElement.querySelector('.warning-content');
+        if (warningContent) {
+            warningContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
     }
 
     // 添加平滑滚动效果
