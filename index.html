@@ -9,6 +9,23 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- 留言板入口按钮 -->
+    <div class="comments-button-wrapper" id="comments-button-wrapper">
+        <button class="comments-button" onclick="toggleCommentsPanel()">
+            <span class="comments-icon">💬</span>
+            <span class="comments-text">留言</span>
+        </button>
+    </div>
+
+    <!-- 留言板侧边栏 -->
+    <div class="comments-sidebar" id="comments-sidebar">
+        <div class="comments-header">
+            <h3>留言板</h3>
+            <button class="comments-close-btn" onclick="toggleCommentsPanel()">✕</button>
+        </div>
+        <div class="comments-content" id="waline-container"></div>
+    </div>
+
     <!-- 微信浏览器警告提示 -->
     <div id="wechat-warning" class="wechat-warning hidden">
         <div class="warning-overlay-bg" onclick="closeWarning()"></div>
@@ -186,6 +203,10 @@
         </footer>
     </div>
 
+    <!-- Waline 留言系统 -->
+    <script src="https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.umd.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.css">
+    
     <script src="script.js"></script>
 </body>
 </html>
