@@ -289,18 +289,17 @@ window.addEventListener('offline', function() {
     console.log('网络连接已断开');
 });
 
-// Service Worker 注册（可选，用于离线支持）
+// Service Worker 注册（用于缓存支持和离线访问）
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        // 取消注释以启用 Service Worker
-        // navigator.serviceWorker.register('/sw.js').then(
-        //     function(registration) {
-        //         console.log('ServiceWorker registration successful');
-        //     },
-        //     function(err) {
-        //         console.log('ServiceWorker registration failed: ', err);
-        //     }
-        // );
+        navigator.serviceWorker.register('/sw.js').then(
+            function(registration) {
+                console.log('ServiceWorker registration successful');
+            },
+            function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            }
+        );
     });
 }
 
