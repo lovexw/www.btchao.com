@@ -11,11 +11,33 @@
 <body>
     <!-- 微信浏览器警告提示 -->
     <div id="wechat-warning" class="wechat-warning hidden">
+        <div class="warning-overlay-bg" onclick="closeWarning()"></div>
+        <div class="corner-arrow">
+            <div class="arrow-pointer">☝️</div>
+            <div class="arrow-text">点击这里</div>
+        </div>
         <div class="warning-content">
             <div class="warning-icon">⚠️</div>
-            <h3>请使用独立浏览器打开</h3>
-            <p>为了获得最佳体验和安全性，请点击右上角「···」选择「在浏览器中打开」</p>
-            <button class="close-btn" onclick="closeWarning()">我知道了</button>
+            <h3>请使用浏览器打开</h3>
+            <p class="warning-main-text">为了获得最佳体验和安全性</p>
+            <div class="instruction-steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">点击右上角 <strong>「···」</strong></span>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">选择 <strong>「在浏览器中打开」</strong></span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="copy-url-btn" onclick="copyCurrentUrl(event)">
+                    <span class="btn-icon">📋</span>
+                    <span class="btn-text">复制网址</span>
+                </button>
+                <button class="close-btn" onclick="closeWarning()">我知道了</button>
+            </div>
+            <div class="copy-success-toast hidden" id="copy-toast">✓ 已复制到剪贴板</div>
         </div>
     </div>
 
