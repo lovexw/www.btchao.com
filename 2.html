@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>微信浏览器提示示例</title>
+<title>微信提示</title>
 <style>
-html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; overflow:hidden;}
+html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; overflow:hidden; }
 #wechatMask {
   display:none;
   position:fixed;
@@ -19,10 +19,7 @@ html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; o
   align-items:center;
   justify-content:center;
   padding:20px;
-  opacity:0;
-  transition: opacity 0.3s ease;
 }
-#wechatMask.show { opacity:1; }
 #wechatMask img { width:160px; margin-bottom:20px; }
 #wechatMask .arrow {
   width:50px; height:50px;
@@ -46,9 +43,8 @@ html, body { margin:0; padding:0; height:100%; font-family: Arial, sans-serif; o
 <div id="wechatMask">
   <img src="https://i.imgur.com/5nqT5sm.png" alt="微信提示图">
   <div class="arrow"></div>
-  <p>检测到您正在微信中打开，请复制链接或尝试在浏览器中打开本页面。</p>
+  <p>检测到您正在微信中打开，请复制链接或点击右上角“在浏览器中打开”。</p>
   <button id="copyBtn">复制链接</button>
-  <button id="openBtn">尝试用浏览器打开</button>
 </div>
 
 <script>
@@ -56,52 +52,20 @@ function isWeChat() {
     return /micromessenger/i.test(navigator.userAgent);
 }
 
-function isAndroid() {
-    return /android/i.test(navigator.userAgent);
-}
-
-function isIOS() {
-    return /iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-
 function showMask() {
-    const mask = document.getElementById('wechatMask');
-    mask.style.display = 'flex';
-    setTimeout(() => mask.classList.add('show'), 50);
+    document.getElementById('wechatMask').style.display = 'flex';
 }
 
 function copyLink() {
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => {
-        alert('链接已复制，请在浏览器中打开');
-    }).catch(() => {
-        alert('复制失败，请手动复制链接');
-    });
+    navigator.clipboard.writeText(url)
+        .then(() => alert('链接已复制，请在浏览器中打开'))
+        .catch(() => alert('复制失败，请手动复制链接'));
 }
 
-function tryOpenInBrowser() {
-    const url = window.location.href;
-
-    // 安卓尝试 intent 协议
-    if (isAndroid()) {
-        window.location.href = `intent://${url.replace(/^https?:\/\//,'')}#Intent;scheme=http;package=com.android.chrome;end`;
-        setTimeout(() => alert('如果未自动打开，请手动复制链接到浏览器'), 1500);
-    } else if (isIOS()) {
-        // iOS 无法直接跳转，只能提示
-        alert('请点击右上角“在浏览器中打开”或手动粘贴链接到浏览器访问');
-    } else {
-        alert('请在浏览器中打开本页面');
-    }
-
-    // 同时尝试复制链接
-    copyLink();
-}
-
-// 初始化
 if (isWeChat()) {
     showMask();
     document.getElementById('copyBtn').addEventListener('click', copyLink);
-    document.getElementById('openBtn').addEventListener('click', tryOpenInBrowser);
 }
 </script>
 
