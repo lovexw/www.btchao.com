@@ -349,6 +349,58 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===== 赞助支持功能 =====
+function copySponsorAddress() {
+    const addressElement = document.querySelector('.sponsor-address');
+    const address = addressElement.getAttribute('data-address');
+    const toastElement = document.getElementById('sponsor-copy-toast');
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(address)
+            .then(() => {
+                showSponsorCopyToast(toastElement);
+            })
+            .catch((err) => {
+                fallbackCopySponsorAddress(address, toastElement);
+            });
+    } else {
+        fallbackCopySponsorAddress(address, toastElement);
+    }
+}
+
+function fallbackCopySponsorAddress(text, toastElement) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.top = '-9999px';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        const successful = document.execCommand('copy');
+        if (successful && toastElement) {
+            showSponsorCopyToast(toastElement);
+        } else if (!successful) {
+            console.error('复制失败');
+        }
+    } catch (err) {
+        console.error('复制出错:', err);
+    }
+    
+    document.body.removeChild(textArea);
+}
+
+function showSponsorCopyToast(toastElement) {
+    if (toastElement) {
+        toastElement.classList.remove('hidden');
+        setTimeout(() => {
+            toastElement.classList.add('hidden');
+        }, 2500);
+    }
+}
+
 // ===== 留言板功能 =====
 function toggleCommentsPanel() {
     const sidebar = document.getElementById('comments-sidebar');

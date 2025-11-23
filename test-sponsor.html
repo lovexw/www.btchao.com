@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赞助支持功能测试</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; margin: 40px 0;">赞助支持功能测试</h1>
+        
+        <!-- 赞助支持 -->
+        <section class="sponsor-section">
+            <div class="sponsor-container">
+                <div class="sponsor-header">
+                    <span class="sponsor-icon">💝</span>
+                    <h2>赞助支持</h2>
+                </div>
+                <p class="sponsor-description">欢迎走过路过的朋友，赞助支持本站长久运行</p>
+                <div class="sponsor-address-box">
+                    <span class="sponsor-label">BTC：</span>
+                    <span class="sponsor-address" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
+                        3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
+                        <img class="sponsor-qrcode" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC地址二维码">
+                    </span>
+                </div>
+                <div class="sponsor-copy-toast hidden" id="sponsor-copy-toast">✓ 地址已复制</div>
+            </div>
+        </section>
+
+        <div style="margin: 40px auto; max-width: 800px; background: white; padding: 20px; border-radius: 10px;">
+            <h3>测试说明：</h3>
+            <ul>
+                <li><strong>点击测试</strong>：点击BTC地址，应该复制到剪贴板并显示"✓ 地址已复制"提示</li>
+                <li><strong>悬停测试</strong>：鼠标悬停在BTC地址上，应该显示二维码（在地址右侧/桌面端，在地址下方/移动端）</li>
+                <li><strong>视觉测试</strong>：确认粉色到橙色的渐变顶部边框显示正常</li>
+                <li><strong>响应式测试</strong>：调整浏览器窗口大小，确认在小屏幕下布局正常</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
