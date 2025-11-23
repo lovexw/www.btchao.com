@@ -8,34 +8,67 @@
 </head>
 <body>
     <div class="container">
-        <h1 style="text-align: center; margin: 40px 0;">赞助支持功能测试</h1>
+        <h1 style="text-align: center; margin: 40px 0;">并排布局功能测试</h1>
         
-        <!-- 赞助支持 -->
-        <section class="sponsor-section">
-            <div class="sponsor-container">
-                <div class="sponsor-header">
-                    <span class="sponsor-icon">💝</span>
-                    <h2>赞助支持</h2>
+        <!-- 工具区域（并排布局） -->
+        <div class="tools-row">
+            <!-- 比特币地址查询 -->
+            <section class="btc-search-section">
+                <div class="btc-search-container">
+                    <div class="btc-search-header">
+                        <span class="btc-search-icon">🔍</span>
+                        <h2>比特币地址查询</h2>
+                    </div>
+                    <p class="btc-search-description">输入比特币地址，查看链上交易详情</p>
+                    <div class="btc-search-box">
+                        <input 
+                            type="text" 
+                            id="btc-address-input" 
+                            class="btc-address-input" 
+                            placeholder="输入比特币地址，例如：1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <button class="btc-search-btn" onclick="searchBTCAddress()">
+                            <span class="btn-icon">🚀</span>
+                            <span class="btn-text">查询</span>
+                        </button>
+                    </div>
+                    <div class="btc-search-tips">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-text">支持 Legacy、SegWit、Native SegWit 等各类地址格式</span>
+                    </div>
                 </div>
-                <p class="sponsor-description">欢迎走过路过的朋友，赞助支持本站长久运行</p>
-                <div class="sponsor-address-box">
-                    <span class="sponsor-label">BTC：</span>
-                    <span class="sponsor-address" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
-                        3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
-                        <img class="sponsor-qrcode" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC地址二维码">
-                    </span>
-                </div>
-                <div class="sponsor-copy-toast hidden" id="sponsor-copy-toast">✓ 地址已复制</div>
-            </div>
-        </section>
+            </section>
 
-        <div style="margin: 40px auto; max-width: 800px; background: white; padding: 20px; border-radius: 10px;">
+            <!-- 赞助支持 -->
+            <section class="sponsor-section">
+                <div class="sponsor-container">
+                    <div class="sponsor-header">
+                        <span class="sponsor-icon">💝</span>
+                        <h2>赞助支持</h2>
+                    </div>
+                    <p class="sponsor-description">欢迎走过路过的朋友，赞助支持本站长久运行</p>
+                    <div class="sponsor-address-box">
+                        <span class="sponsor-label">BTC：</span>
+                        <span class="sponsor-address" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
+                            3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
+                            <img class="sponsor-qrcode" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC地址二维码">
+                        </span>
+                    </div>
+                    <div class="sponsor-copy-toast hidden" id="sponsor-copy-toast">✓ 地址已复制</div>
+                </div>
+            </section>
+        </div>
+
+        <div style="margin: 40px auto; max-width: 1200px; background: white; padding: 20px; border-radius: 10px;">
             <h3>测试说明：</h3>
             <ul>
+                <li><strong>并排布局测试</strong>：桌面端应该看到两个模块并排显示（左侧地址查询 60%，右侧赞助支持 40%）</li>
                 <li><strong>点击测试</strong>：点击BTC地址，应该复制到剪贴板并显示"✓ 地址已复制"提示</li>
                 <li><strong>悬停测试</strong>：鼠标悬停在BTC地址上，应该显示二维码（在地址右侧/桌面端，在地址下方/移动端）</li>
-                <li><strong>视觉测试</strong>：确认粉色到橙色的渐变顶部边框显示正常</li>
-                <li><strong>响应式测试</strong>：调整浏览器窗口大小，确认在小屏幕下布局正常</li>
+                <li><strong>视觉测试</strong>：两个模块高度应该一致，整体协调美观</li>
+                <li><strong>响应式测试</strong>：调整浏览器窗口到 < 968px，两个模块应该堆叠显示</li>
             </ul>
         </div>
     </div>
