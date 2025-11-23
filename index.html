@@ -75,34 +75,56 @@
             </div>
         </header>
 
-        <!-- 比特币地址查询 -->
-        <section class="btc-search-section">
-            <div class="btc-search-container">
-                <div class="btc-search-header">
-                    <span class="btc-search-icon">🔍</span>
-                    <h2>比特币地址查询</h2>
+        <!-- 工具区域（并排布局） -->
+        <div class="tools-row">
+            <!-- 比特币地址查询 -->
+            <section class="btc-search-section">
+                <div class="btc-search-container">
+                    <div class="btc-search-header">
+                        <span class="btc-search-icon">🔍</span>
+                        <h2>比特币地址查询</h2>
+                    </div>
+                    <p class="btc-search-description">输入比特币地址，查看链上交易详情</p>
+                    <div class="btc-search-box">
+                        <input 
+                            type="text" 
+                            id="btc-address-input" 
+                            class="btc-address-input" 
+                            placeholder="输入比特币地址，例如：1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <button class="btc-search-btn" onclick="searchBTCAddress()">
+                            <span class="btn-icon">🚀</span>
+                            <span class="btn-text">查询</span>
+                        </button>
+                    </div>
+                    <div class="btc-search-tips">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-text">支持 Legacy、SegWit、Native SegWit 等各类地址格式</span>
+                    </div>
                 </div>
-                <p class="btc-search-description">输入比特币地址，查看链上交易详情</p>
-                <div class="btc-search-box">
-                    <input 
-                        type="text" 
-                        id="btc-address-input" 
-                        class="btc-address-input" 
-                        placeholder="输入比特币地址，例如：1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-                        autocomplete="off"
-                        spellcheck="false"
-                    />
-                    <button class="btc-search-btn" onclick="searchBTCAddress()">
-                        <span class="btn-icon">🚀</span>
-                        <span class="btn-text">查询</span>
-                    </button>
+            </section>
+
+            <!-- 赞助支持 -->
+            <section class="sponsor-section">
+                <div class="sponsor-container">
+                    <div class="sponsor-header">
+                        <span class="sponsor-icon">💝</span>
+                        <h2>赞助支持</h2>
+                    </div>
+                    <p class="sponsor-description">欢迎走过路过的朋友，赞助支持本站长久运行</p>
+                    <div class="sponsor-address-box">
+                        <span class="sponsor-label">BTC：</span>
+                        <span class="sponsor-address" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
+                            3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
+                            <img class="sponsor-qrcode" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC地址二维码">
+                        </span>
+                    </div>
+                    <div class="sponsor-copy-toast hidden" id="sponsor-copy-toast">✓ 地址已复制</div>
                 </div>
-                <div class="btc-search-tips">
-                    <span class="tip-icon">💡</span>
-                    <span class="tip-text">支持 Legacy、SegWit、Native SegWit 等各类地址格式</span>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- 导航卡片区域 -->
          <main class="main-content">
