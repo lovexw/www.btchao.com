@@ -303,6 +303,52 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// ===== 比特币地址查询功能 =====
+function searchBTCAddress() {
+    const input = document.getElementById('btc-address-input');
+    const address = input.value.trim();
+    
+    if (!address) {
+        alert('请输入比特币地址');
+        input.focus();
+        return;
+    }
+    
+    if (!validateBTCAddress(address)) {
+        alert('请输入有效的比特币地址\n\n支持的地址格式：\n- Legacy (以1开头)\n- SegWit (以3开头)\n- Native SegWit/Bech32 (以bc1开头)');
+        input.focus();
+        input.select();
+        return;
+    }
+    
+    const okLinkUrl = `https://www.oklink.com/cn/btc/address/${address}`;
+    window.open(okLinkUrl, '_blank', 'noopener,noreferrer');
+}
+
+function validateBTCAddress(address) {
+    if (!address || typeof address !== 'string') {
+        return false;
+    }
+    
+    const legacy = /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/;
+    const segwit = /^3[a-km-zA-HJ-NP-Z1-9]{25,34}$/;
+    const bech32 = /^(bc1|tb1)[a-z0-9]{25,87}$/i;
+    
+    return legacy.test(address) || segwit.test(address) || bech32.test(address);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const addressInput = document.getElementById('btc-address-input');
+    if (addressInput) {
+        addressInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchBTCAddress();
+            }
+        });
+    }
+});
+
 // ===== 留言板功能 =====
 function toggleCommentsPanel() {
     const sidebar = document.getElementById('comments-sidebar');
