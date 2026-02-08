@@ -244,31 +244,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 添加入场动画观察器（可选增强效果）
-    if ('IntersectionObserver' in window) {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // 为每个卡片添加观察
-        const cardsToObserve = document.querySelectorAll('.card');
-        cardsToObserve.forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
-            observer.observe(card);
-        });
-    }
+    // 直接显示所有卡片（移除懒加载，立即显示所有内容）
+    const cardsToShow = document.querySelectorAll('.card');
+    cardsToShow.forEach((card, index) => {
+        // 直接设置卡片为可见状态
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+        card.style.transition = `opacity 0.6s ease ${index * 0.05}s, transform 0.6s ease ${index * 0.05}s`;
+    });
 
     // 性能优化：预加载链接
     const links = document.querySelectorAll('a[href^="https://"]');
