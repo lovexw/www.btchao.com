@@ -6,7 +6,7 @@
 // - 第三方资源：永不缓存
 // ===============================
 
-const CACHE_NAME = 'btchao-cache-v2';
+const CACHE_NAME = 'btchao-v20240215';
 
 // 不缓存的第三方服务
 const EXTERNAL_SERVICES = [
