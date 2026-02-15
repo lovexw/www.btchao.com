@@ -272,19 +272,24 @@ window.addEventListener('offline', function() {
     console.log('网络连接已断开');
 });
 
-// Service Worker 注册（用于缓存支持和离线访问）
+// === 修改开始：注销 Service Worker 以解决缓存不更新问题 ===
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js').then(
-            function(registration) {
-                console.log('ServiceWorker registration successful');
-            },
-            function(err) {
-                console.log('ServiceWorker registration failed: ', err);
+        // 不再注册 register，而是获取现有的 registrations 并注销
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister().then(function(boolean) {
+                    if(boolean) {
+                        console.log('ServiceWorker 已成功注销 (Unregistered)，下次访问将直接获取最新内容');
+                        // 可选：注销成功后强制刷新一次页面，确保用户立即看到新版
+                        // window.location.reload(); 
+                    }
+                });
             }
-        );
+        });
     });
 }
+// === 修改结束 ===
 
 // ===== 比特币地址查询功能 =====
 function searchBTCAddress() {
