@@ -955,6 +955,37 @@ body::before {
     color: var(--primary-color);
 }
 
+/* ===== 临时置顶卡片 ===== */
+.card-pinned {
+    border-color: rgba(255, 153, 0, 0.35);
+    background: linear-gradient(135deg, #FFFBF2 0%, #FFFFFF 100%);
+}
+
+.card-pinned::before {
+    background: linear-gradient(90deg, #FF6B35 0%, var(--accent-color) 100%);
+}
+
+.card-pin-label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #FF6B35;
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.3);
+    border-radius: 4px;
+    padding: 2px 6px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+    z-index: 2;
+    user-select: none;
+}
+
+.card-pinned .card-header {
+    margin-top: 20px;
+}
+
 /* ===== 占位卡片 ===== */
 .card-placeholder {
     background: #F5F5F5;
