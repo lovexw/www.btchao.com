@@ -339,9 +339,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ===== 赞助支持功能 =====
 function copySponsorAddress() {
-    const addressElement = document.querySelector('.sponsor-address');
-    const address = addressElement.getAttribute('data-address');
-    const toastElement = document.getElementById('sponsor-copy-toast');
+    // 优先使用底部的新地址元素
+    const bottomAddressElement = document.querySelector('.sponsor-address-bottom');
+    const topAddressElement = document.querySelector('.sponsor-address');
+    
+    const addressElement = bottomAddressElement || topAddressElement;
+    const address = addressElement ? addressElement.getAttribute('data-address') : '3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv';
+    
+    // 优先使用底部的新 toast 元素
+    const bottomToastElement = document.getElementById('sponsor-copy-toast-bottom');
+    const topToastElement = document.getElementById('sponsor-copy-toast');
+    const toastElement = bottomToastElement || topToastElement;
     
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(address)
