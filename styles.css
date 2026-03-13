@@ -382,6 +382,39 @@ body::before {
     background: linear-gradient(90deg, #FF1A75 0%, #FF6B9D 100%);
 }
 
+.subscribe-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.subscribe-icon {
+    font-size: 24px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.subscribe-header h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.subscribe-description {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.subscribe-form-wrapper {
+    width: 100%;
+    max-width: 320px;
+}
+
 /* ===== 比特币地址查询区域 ===== */
 .btc-search-section {
     display: flex;
@@ -946,6 +979,18 @@ body::before {
     /* 订阅区域移动端样式 */
     .subscribe-container {
         padding: 16px 12px;
+    }
+
+    .subscribe-header h2 {
+        font-size: 16px;
+    }
+
+    .subscribe-description {
+        font-size: 12px;
+    }
+
+    .subscribe-form-wrapper {
+        max-width: 280px;
     }
 
     .sponsor-qrcode {
