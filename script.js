@@ -206,7 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.card:not(.card-placeholder)');
     cards.forEach(card => {
         card.addEventListener('click', function(e) {
-            console.log('访问:', this.href);
+            if (this.href) {
+                console.log('访问:', this.href);
+            }
         });
     });
 
@@ -268,6 +270,7 @@ window.addEventListener('online', function() {
     console.log('网络连接已恢复');
 });
 
+// 添加网络状态监测（可选）
 window.addEventListener('offline', function() {
     console.log('网络连接已断开');
 });
@@ -377,7 +380,7 @@ function fallbackCopySponsorAddress(text, toastElement) {
     try {
         const successful = document.execCommand('copy');
         if (successful && toastElement) {
-            showSponsorCopyToast(toastElement);
+            showCopySuccessToast(toastElement);
         } else if (!successful) {
             console.error('复制失败');
         }
@@ -397,6 +400,146 @@ function showSponsorCopyToast(toastElement) {
     }
 }
 
+// ===== 比特币汇率及计算器功能 =====
+let btcToUsd = 0;
+let btcToCny = 0;
+let lastSource = 'btc';
+
+async function fetchBtcPrice() {
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
+        const data = await response.json();
+        
+        if (data && data.bitcoin) {
+            btcToUsd = data.bitcoin.usd;
+            btcToCny = data.bitcoin.cny;
+            
+            // 初始加载或定时刷新时更新
+            if (!document.activeElement || !['calc-btc', 'calc-cny', 'calc-usd'].includes(document.activeElement.id)) {
+                updateCalculatorValues(lastSource);
+            }
+            
+            updatePriceDisplay();
+        }
+    } catch (error) {
+        console.warn('CoinGecko 失败，尝试 Binance');
+        try {
+            const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+            const binanceData = await response.json();
+            btcToUsd = parseFloat(binanceData.price);
+            btcToCny = btcToUsd * 7.23; // 估算汇率
+            
+            if (!document.activeElement || !['calc-btc', 'calc-cny', 'calc-usd'].includes(document.activeElement.id)) {
+                updateCalculatorValues(lastSource);
+            }
+            updatePriceDisplay();
+        } catch (e) {
+            console.error('所有价格 API 均失效');
+        }
+    }
+}
+
+function parseValue(val) {
+    if (val === null || val === undefined || val === '') return null;
+    const cleaned = val.toString().replace(/[^0-9.]/g, '');
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? null : parsed;
+}
+
+function updatePriceDisplay() {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyDisplay = document.getElementById('btc-price-cny');
+    const usdDisplay = document.getElementById('btc-price-usd');
+    const timeElement = document.getElementById('price-update-time');
+    
+    const amount = parseValue(btcInput.value) || 0;
+    
+    if (cnyDisplay && btcToCny > 0) {
+        const cnyTotal = amount * btcToCny;
+        cnyDisplay.innerText = "¥" + cnyTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+    
+    if (usdDisplay && btcToUsd > 0) {
+        const usdTotal = amount * btcToUsd;
+        usdDisplay.innerText = "/ $" + usdTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
+    if (timeElement) {
+        timeElement.innerText = new Date().toLocaleTimeString();
+    }
+}
+
+function updateCalculatorValues(source) {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyInput = document.getElementById('calc-cny');
+    const usdInput = document.getElementById('calc-usd');
+    
+    if (!btcInput || !cnyInput || !usdInput || btcToUsd === 0) return;
+    lastSource = source;
+
+    if (source === 'btc') {
+        const btcValue = parseValue(btcInput.value);
+        if (btcValue === null) {
+            cnyInput.value = '';
+            usdInput.value = '';
+        } else {
+            cnyInput.value = (btcValue * btcToCny).toFixed(2);
+            usdInput.value = (btcValue * btcToUsd).toFixed(2);
+        }
+    } else if (source === 'cny') {
+        const cnyValue = parseValue(cnyInput.value);
+        if (cnyValue === null) {
+            btcInput.value = '';
+            usdInput.value = '';
+        } else {
+            const btcValue = cnyValue / btcToCny;
+            btcInput.value = btcValue.toFixed(8).replace(/\.?0+$/, '');
+            usdInput.value = (btcValue * btcToUsd).toFixed(2);
+        }
+    } else if (source === 'usd') {
+        const usdValue = parseValue(usdInput.value);
+        if (usdValue === null) {
+            btcInput.value = '';
+            cnyInput.value = '';
+        } else {
+            const btcValue = usdValue / btcToUsd;
+            btcInput.value = btcValue.toFixed(8).replace(/\.?0+$/, '');
+            cnyInput.value = (btcValue * btcToCny).toFixed(2);
+        }
+    }
+    
+    updatePriceDisplay();
+}
+
+function initExchangeRate() {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyInput = document.getElementById('calc-cny');
+    const usdInput = document.getElementById('calc-usd');
+    
+    const inputs = [btcInput, cnyInput, usdInput];
+    inputs.forEach(input => {
+        if (!input) return;
+        
+        // 当获得焦点时，点击全选
+        input.addEventListener('focus', () => {
+            input.select();
+        });
+        
+        input.addEventListener('input', () => {
+            const source = input.id.replace('calc-', '');
+            updateCalculatorValues(source);
+        });
+    });
+    
+    // 初始化时如果 BTC 为空，设为 1
+    if (btcInput && btcInput.value === '') {
+        btcInput.value = '1';
+    }
+    
+    fetchBtcPrice();
+    setInterval(fetchBtcPrice, 60000);
+}
+
 // ===== 留言板功能 =====
 function toggleCommentsPanel() {
     const sidebar = document.getElementById('comments-sidebar');
@@ -407,9 +550,7 @@ function toggleCommentsPanel() {
 
 function initializeWaline() {
     const container = document.getElementById('waline-container');
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     if (window.Waline && window.Waline.init) {
         try {
@@ -433,7 +574,13 @@ function initializeWaline() {
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeWaline);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeWaline();
+        initExchangeRate();
+    });
 } else {
-    setTimeout(initializeWaline, 100);
+    setTimeout(() => {
+        initializeWaline();
+        initExchangeRate();
+    }, 100);
 }

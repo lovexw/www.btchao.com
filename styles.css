@@ -1092,6 +1092,7 @@ body::before {
     background: radial-gradient(circle, var(--accent-shadow) 0%, transparent 70%);
     transform: translate(-50%, -50%);
     transition: width 0.3s ease, height 0.3s ease;
+    pointer-events: none;
 }
 
 .card:hover::before {
@@ -1670,7 +1671,7 @@ body::before {
     display: inline-block;
 }
 
-/* 留言板侧边栏 */
+/* 留�����板侧边栏 */
 .comments-sidebar {
     position: fixed;
     top: 0;
@@ -2063,6 +2064,115 @@ button.waline-submit:disabled {
     .sponsor-qrcode-bottom {
         width: 120px;
         height: 120px;
+    }
+}
+
+/* 比特币汇率卡片样式 - 优化版 (更紧凑) */
+.exchange-rate-card {
+    cursor: default !important;
+    padding: 16px 18px !important;
+}
+
+.exchange-rate-card:hover {
+    transform: none !important;
+    box-shadow: 0 2px 8px var(--card-shadow) !important;
+}
+
+.exchange-rate-card .card-header {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.price-simple {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.price-main {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.price-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.calculator-compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    z-index: 5;
+}
+
+.calc-item {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    margin-bottom: 2px;
+}
+
+.calc-item:hover {
+    border-color: var(--accent-color);
+}
+
+.calc-item:focus-within {
+    border-color: var(--accent-color);
+    background: #fff;
+    box-shadow: 0 0 0 2px var(--accent-shadow);
+}
+
+.calc-item label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--accent-color);
+    width: 40px;
+    flex-shrink: 0;
+}
+
+.calc-item input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 4px 0;
+    font-size: 15px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary);
+    width: 100%;
+    outline: none;
+}
+
+/* 移除浏览器默认的 number input 箭头 */
+.calc-item input::-webkit-outer-spin-button,
+.calc-item input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.calc-item input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.price-update-tiny {
+    font-size: 10px;
+    color: #999;
+    margin-top: 8px;
+    text-align: right;
+}
+
+@media (max-width: 480px) {
+    .price-main {
+        font-size: 16px;
     }
 }
 

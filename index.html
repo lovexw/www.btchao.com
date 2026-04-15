@@ -137,18 +137,33 @@
         <!-- 导航卡片区域 -->
          <main class="main-content">
              <div class="cards-grid">
-                 <!-- 0. 临时置顶：比特币BIP-110提案 -->
-                 <a href="https://bip110.btchao.com" class="card card-pinned" target="_blank" rel="noopener noreferrer">
-                     <span class="card-pin-label">临时置顶</span>
+                 <!-- 0. 比特币汇率 -->
+                 <div class="card card-pinned exchange-rate-card">
+                     <span class="card-pin-label">实时数据</span>
                      <div class="card-header">
-                         <div class="card-icon">⚡</div>
-                         <h3 class="card-title">比特币BIP-110提案进行时</h3>
+                         <div class="card-icon">💰</div>
+                         <h3 class="card-title">比特币汇率</h3>
                      </div>
-                     <p class="card-description">守护比特币的使命，把重点重新放回到提升比特币作为货币的能力。</p>
-                     <div class="card-footer">
-                         <span class="card-link">了解 →</span>
+                     <div class="price-simple">
+                         <span id="btc-price-cny" class="price-main">加载中...</span>
+                         <span id="btc-price-usd" class="price-sub"></span>
                      </div>
-                 </a>
+                     <div class="calculator-compact">
+                         <div class="calc-item">
+                             <label for="calc-btc">BTC</label>
+                             <input type="text" id="calc-btc" placeholder="0.00000000" inputmode="decimal" autocomplete="off">
+                         </div>
+                         <div class="calc-item">
+                             <label for="calc-cny">CNY</label>
+                             <input type="text" id="calc-cny" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                         </div>
+                         <div class="calc-item">
+                             <label for="calc-usd">USD</label>
+                             <input type="text" id="calc-usd" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                         </div>
+                     </div>
+                     <div class="price-update-tiny">更新于: <span id="price-update-time">-</span></div>
+                 </div>
 
                  <!-- 1. 比特币白皮书 -->
                  <a href="https://paper.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
