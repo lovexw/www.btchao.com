@@ -144,33 +144,25 @@
                          <div class="card-icon">💰</div>
                          <h3 class="card-title">比特币汇率</h3>
                      </div>
-                     <div class="exchange-rate-content">
-                         <div class="price-display">
-                             <div class="price-item">
-                                 <span class="price-label">CNY</span>
-                                 <span id="btc-price-cny" class="price-value">加载中...</span>
-                             </div>
-                             <div class="price-item">
-                                 <span class="price-label">USD</span>
-                                 <span id="btc-price-usd" class="price-value">加载中...</span>
-                             </div>
-                             <div class="price-update">更新于: <span id="price-update-time">-</span></div>
+                     <div class="price-simple">
+                         <span id="btc-price-cny" class="price-main">加载中...</span>
+                         <span id="btc-price-usd" class="price-sub"></span>
+                     </div>
+                     <div class="calculator-compact">
+                         <div class="calc-item">
+                             <label for="calc-btc">BTC</label>
+                             <input type="text" id="calc-btc" placeholder="0.00000000" inputmode="decimal" autocomplete="off">
                          </div>
-                         <div class="calculator">
-                             <div class="calc-row">
-                                 <span class="calc-label">BTC</span>
-                                 <input type="number" id="calc-btc" step="0.00000001" placeholder="0.00" autocomplete="off">
-                             </div>
-                             <div class="calc-row">
-                                 <span class="calc-label">CNY</span>
-                                 <input type="number" id="calc-cny" step="0.01" placeholder="0.00" autocomplete="off">
-                             </div>
-                             <div class="calc-row">
-                                 <span class="calc-label">USD</span>
-                                 <input type="number" id="calc-usd" step="0.01" placeholder="0.00" autocomplete="off">
-                             </div>
+                         <div class="calc-item">
+                             <label for="calc-cny">CNY</label>
+                             <input type="text" id="calc-cny" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                         </div>
+                         <div class="calc-item">
+                             <label for="calc-usd">USD</label>
+                             <input type="text" id="calc-usd" placeholder="0.00" inputmode="decimal" autocomplete="off">
                          </div>
                      </div>
+                     <div class="price-update-tiny">更新于: <span id="price-update-time">-</span></div>
                  </div>
 
                  <!-- 1. 比特币白皮书 -->
