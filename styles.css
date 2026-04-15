@@ -2066,6 +2066,118 @@ button.waline-submit:disabled {
     }
 }
 
+/* 比特币汇率卡片样式 */
+.exchange-rate-card {
+    cursor: default !important;
+}
+
+.exchange-rate-card:hover {
+    transform: none !important;
+    box-shadow: 0 2px 8px var(--card-shadow) !important;
+}
+
+.exchange-rate-content {
+    margin-top: 15px;
+}
+
+.price-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.price-item {
+    flex: 1;
+    min-width: 100px;
+}
+
+.price-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.price-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.price-update {
+    width: 100%;
+    font-size: 11px;
+    color: #999;
+    margin-top: 5px;
+}
+
+.calculator {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.calc-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.calc-label {
+    width: 40px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.calc-row input {
+    flex: 1;
+    background: #f8f8f8;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.calc-row input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: #fff;
+    box-shadow: 0 0 0 3px var(--accent-shadow);
+}
+
+/* 移除浏览器默认的 number input 箭头 */
+.calc-row input::-webkit-outer-spin-button,
+.calc-row input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.calc-row input[type=number] {
+    -moz-appearance: textfield;
+}
+
+@media (max-width: 480px) {
+    .price-value {
+        font-size: 16px;
+    }
+    
+    .calc-row input {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+
 /* ===== 打印样式 ===== */
 @media print {
     body {

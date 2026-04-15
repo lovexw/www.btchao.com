@@ -206,7 +206,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const cards = document.querySelectorAll('.card:not(.card-placeholder)');
     cards.forEach(card => {
         card.addEventListener('click', function(e) {
-            console.log('访问:', this.href);
+            if (this.href) {
+                console.log('访问:', this.href);
+            }
         });
     });
 
@@ -377,7 +379,7 @@ function fallbackCopySponsorAddress(text, toastElement) {
     try {
         const successful = document.execCommand('copy');
         if (successful && toastElement) {
-            showSponsorCopyToast(toastElement);
+            showCopySuccessToast(toastElement);
         } else if (!successful) {
             console.error('复制失败');
         }
@@ -395,6 +397,109 @@ function showSponsorCopyToast(toastElement) {
             toastElement.classList.add('hidden');
         }, 2500);
     }
+}
+
+// ===== 比特币汇率功能 =====
+let btcToUsd = 0;
+let btcToCny = 0;
+
+async function fetchBtcPrice() {
+    try {
+        // 使用 CoinGecko API 获取比特币价格
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
+        const data = await response.json();
+        
+        if (data.bitcoin) {
+            btcToUsd = data.bitcoin.usd;
+            btcToCny = data.bitcoin.cny;
+            
+            updatePriceUI();
+            // 如果计算器是初始状态（1 BTC），则更新其他货币
+            const btcInput = document.getElementById('calc-btc');
+            if (btcInput && btcInput.value === '1') {
+                updateCalculatorValues('btc');
+            }
+        }
+    } catch (error) {
+        console.error('获取比特币价格失败:', error);
+        const cnyElement = document.getElementById('btc-price-cny');
+        const usdElement = document.getElementById('btc-price-usd');
+        if (cnyElement) cnyElement.innerText = '加载失败';
+        if (usdElement) usdElement.innerText = '加载失败';
+    }
+}
+
+function updatePriceUI() {
+    const cnyElement = document.getElementById('btc-price-cny');
+    const usdElement = document.getElementById('btc-price-usd');
+    const timeElement = document.getElementById('price-update-time');
+    
+    if (cnyElement) cnyElement.innerText = `¥${btcToCny.toLocaleString()}`;
+    if (usdElement) usdElement.innerText = `$${btcToUsd.toLocaleString()}`;
+    if (timeElement) {
+        const now = new Date();
+        timeElement.innerText = now.toLocaleTimeString();
+    }
+}
+
+function updateCalculatorValues(source) {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyInput = document.getElementById('calc-cny');
+    const usdInput = document.getElementById('calc-usd');
+    
+    if (!btcInput || !cnyInput || !usdInput || btcToUsd === 0) return;
+
+    if (source === 'btc') {
+        const btcValue = parseFloat(btcInput.value) || 0;
+        if (btcValue === 0 && btcInput.value === '') {
+            cnyInput.value = '';
+            usdInput.value = '';
+        } else {
+            cnyInput.value = (btcValue * btcToCny).toFixed(2);
+            usdInput.value = (btcValue * btcToUsd).toFixed(2);
+        }
+    } else if (source === 'cny') {
+        const cnyValue = parseFloat(cnyInput.value) || 0;
+        if (cnyValue === 0 && cnyInput.value === '') {
+            btcInput.value = '';
+            usdInput.value = '';
+        } else {
+            const btcValue = cnyValue / btcToCny;
+            btcInput.value = btcValue.toFixed(8);
+            usdInput.value = (btcValue * btcToUsd).toFixed(2);
+        }
+    } else if (source === 'usd') {
+        const usdValue = parseFloat(usdInput.value) || 0;
+        if (usdValue === 0 && usdInput.value === '') {
+            btcInput.value = '';
+            cnyInput.value = '';
+        } else {
+            const btcValue = usdValue / btcToUsd;
+            btcInput.value = btcValue.toFixed(8);
+            cnyInput.value = (btcValue * btcToCny).toFixed(2);
+        }
+    }
+}
+
+function initExchangeRate() {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyInput = document.getElementById('calc-cny');
+    const usdInput = document.getElementById('calc-usd');
+    
+    if (btcInput) {
+        btcInput.value = '1';
+        btcInput.addEventListener('input', () => updateCalculatorValues('btc'));
+    }
+    if (cnyInput) {
+        cnyInput.addEventListener('input', () => updateCalculatorValues('cny'));
+    }
+    if (usdInput) {
+        usdInput.addEventListener('input', () => updateCalculatorValues('usd'));
+    }
+    
+    fetchBtcPrice();
+    // 每 60 秒刷新一次价格
+    setInterval(fetchBtcPrice, 60000);
 }
 
 // ===== 留言板功能 =====
@@ -433,7 +538,13 @@ function initializeWaline() {
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeWaline);
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeWaline();
+        initExchangeRate();
+    });
 } else {
-    setTimeout(initializeWaline, 100);
+    setTimeout(() => {
+        initializeWaline();
+        initExchangeRate();
+    }, 100);
 }
