@@ -399,23 +399,30 @@ function showSponsorCopyToast(toastElement) {
     }
 }
 
-// ===== 比特币汇率功能 =====
+// ===== 比特币汇率及计算器功能 =====
 let btcToUsd = 0;
 let btcToCny = 0;
 
 async function fetchBtcPrice() {
     try {
-        // 使用 CoinGecko API 获取比特币价格
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
-        const data = await response.json();
+        // 使用多个 API 提高可靠性
+        let data;
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
+            data = await response.json();
+        } catch (e) {
+            console.warn('CoinGecko 失败，尝试 Binance');
+            const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+            const binanceData = await response.json();
+            // 粗略估算 CNY (1 USD = 7.2 CNY)
+            data = { bitcoin: { usd: parseFloat(binanceData.price), cny: parseFloat(binanceData.price) * 7.23 } };
+        }
         
-        if (data.bitcoin) {
+        if (data && data.bitcoin) {
             btcToUsd = data.bitcoin.usd;
             btcToCny = data.bitcoin.cny;
             
-            updatePriceUI();
-            
-            // 自动更新计算器：如果用户正在输入，以正在输入的为准；否则默认以 BTC=1 为准
+            // 自动同步计算器和顶部显示
             const btcInput = document.getElementById('calc-btc');
             const cnyInput = document.getElementById('calc-cny');
             const usdInput = document.getElementById('calc-usd');
@@ -425,32 +432,51 @@ async function fetchBtcPrice() {
                 updateCalculatorValues('cny');
             } else if (activeId === 'calc-usd' && usdInput.value !== '') {
                 updateCalculatorValues('usd');
-            } else if (btcInput) {
-                if (btcInput.value === '' || btcInput.value === '1') {
+            } else {
+                if (btcInput && (btcInput.value === '' || btcInput.value === '1')) {
                     btcInput.value = '1';
                 }
                 updateCalculatorValues('btc');
             }
+            
+            updatePriceDisplay();
         }
     } catch (error) {
-        console.error('获取比特币价格失败:', error);
-        const cnyElement = document.getElementById('btc-price-cny');
-        const usdElement = document.getElementById('btc-price-usd');
-        if (cnyElement) cnyElement.innerText = '加载中...';
-        if (usdElement) usdElement.innerText = '';
+        console.error('获取价格失败:', error);
+        document.getElementById('btc-price-cny').innerText = '获取失败';
     }
 }
 
-function updatePriceUI() {
-    const cnyElement = document.getElementById('btc-price-cny');
-    const usdElement = document.getElementById('btc-price-usd');
+// 解析数值
+function parseValue(val) {
+    if (val === null || val === undefined || val === '') return null;
+    const cleaned = val.toString().replace(/[^0-9.]/g, '');
+    const parsed = parseFloat(cleaned);
+    return isNaN(parsed) ? null : parsed;
+}
+
+// 更新顶部的价格显示
+function updatePriceDisplay() {
+    const btcInput = document.getElementById('calc-btc');
+    const cnyDisplay = document.getElementById('btc-price-cny');
+    const usdDisplay = document.getElementById('btc-price-usd');
     const timeElement = document.getElementById('price-update-time');
     
-    if (cnyElement) cnyElement.innerText = "¥" + btcToCny.toLocaleString();
-    if (usdElement) usdElement.innerText = "/ $" + btcToUsd.toLocaleString();
+    const amount = parseValue(btcInput.value) || 0;
+    
+    if (amount === 0) {
+        cnyDisplay.innerText = "¥0.00";
+        usdDisplay.innerText = "/ $0.00";
+    } else {
+        const cnyTotal = amount * btcToCny;
+        const usdTotal = amount * btcToUsd;
+        
+        cnyDisplay.innerText = "¥" + cnyTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        usdDisplay.innerText = "/ $" + usdTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    }
+
     if (timeElement) {
-        const now = new Date();
-        timeElement.innerText = now.toLocaleTimeString();
+        timeElement.innerText = new Date().toLocaleTimeString();
     }
 }
 
@@ -460,15 +486,6 @@ function updateCalculatorValues(source) {
     const usdInput = document.getElementById('calc-usd');
     
     if (!btcInput || !cnyInput || !usdInput || btcToUsd === 0) return;
-
-    // 解析数值，处理逗号
-    const parseValue = (val) => {
-        if (val === null || val === undefined || val === '') return null;
-        // 允许数字、小数点和逗号
-        const cleaned = val.toString().replace(/[^0-9.]/g, '');
-        const parsed = parseFloat(cleaned);
-        return isNaN(parsed) ? null : parsed;
-    };
 
     if (source === 'btc') {
         const btcValue = parseValue(btcInput.value);
@@ -500,6 +517,9 @@ function updateCalculatorValues(source) {
             cnyInput.value = (btcValue * btcToCny).toFixed(2);
         }
     }
+    
+    // 每次计算器更新后，同步更新顶部的价格展示
+    updatePriceDisplay();
 }
 
 function initExchangeRate() {
@@ -507,28 +527,18 @@ function initExchangeRate() {
     const cnyInput = document.getElementById('calc-cny');
     const usdInput = document.getElementById('calc-usd');
     
-    const inputs = [btcInput, cnyInput, usdInput];
-    inputs.forEach(input => {
+    [btcInput, cnyInput, usdInput].forEach(input => {
         if (input) {
-            // 点击或获得焦点时自动全选
             input.addEventListener('focus', () => {
                 setTimeout(() => input.select(), 10);
             });
+            
+            const source = input.id.replace('calc-', '');
+            input.addEventListener('input', () => updateCalculatorValues(source));
         }
     });
-
-    if (btcInput) {
-        btcInput.addEventListener('input', () => updateCalculatorValues('btc'));
-    }
-    if (cnyInput) {
-        cnyInput.addEventListener('input', () => updateCalculatorValues('cny'));
-    }
-    if (usdInput) {
-        usdInput.addEventListener('input', () => updateCalculatorValues('usd'));
-    }
     
     fetchBtcPrice();
-    // 每 60 秒刷新一次价格
     setInterval(fetchBtcPrice, 60000);
 }
 
@@ -542,9 +552,7 @@ function toggleCommentsPanel() {
 
 function initializeWaline() {
     const container = document.getElementById('waline-container');
-    if (!container) {
-        return;
-    }
+    if (!container) return;
 
     if (window.Waline && window.Waline.init) {
         try {
