@@ -351,70 +351,6 @@ body::before {
     animation: fadeInUp 0.9s ease-out;
 }
 
-/* ===== 邮件订阅区域 ===== */
-.subscribe-section {
-    display: flex;
-    flex-direction: column;
-}
-
-.subscribe-container {
-    background: var(--card-bg);
-    border-radius: 16px;
-    padding: 20px 16px;
-    box-shadow: 0 4px 12px var(--card-shadow);
-    border: 1px solid var(--border-color);
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.subscribe-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #FF1A75 0%, #FF6B9D 100%);
-}
-
-.subscribe-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.subscribe-icon {
-    font-size: 24px;
-    animation: float 3s ease-in-out infinite;
-}
-
-.subscribe-header h2 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin: 0;
-}
-
-.subscribe-description {
-    text-align: center;
-    color: var(--text-secondary);
-    font-size: 13px;
-    margin-bottom: 16px;
-    line-height: 1.5;
-}
-
-.subscribe-form-wrapper {
-    width: 100%;
-    max-width: 320px;
-}
-
 /* ===== 比特币地址查询区域 ===== */
 .btc-search-section {
     display: flex;
@@ -976,23 +912,6 @@ body::before {
 }
 
 @media (max-width: 768px) {
-    /* 订阅区域移动端样式 */
-    .subscribe-container {
-        padding: 16px 12px;
-    }
-
-    .subscribe-header h2 {
-        font-size: 16px;
-    }
-
-    .subscribe-description {
-        font-size: 12px;
-    }
-
-    .subscribe-form-wrapper {
-        max-width: 280px;
-    }
-
     .sponsor-qrcode {
         left: 50%;
         top: calc(100% + 10px);
