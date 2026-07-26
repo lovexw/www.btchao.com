@@ -312,8 +312,8 @@ function searchBTCAddress() {
         return;
     }
     
-    const okLinkUrl = `https://www.oklink.com/cn/btc/address/${address}`;
-    window.open(okLinkUrl, '_blank', 'noopener,noreferrer');
+    const mempoolUrl = `https://mempool.space/address/${address}`;
+    window.open(mempoolUrl, '_blank', 'noopener,noreferrer');
 }
 
 function validateBTCAddress(address) {
