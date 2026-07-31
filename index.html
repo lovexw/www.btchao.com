@@ -141,37 +141,43 @@
             </section>
         </div>
 
+        <!-- 横向实时行情条 -->
+        <div class="rate-bar">
+            <div class="rate-bar-live">
+                <span class="rate-bar-dot"></span>
+                <span class="rate-bar-label">LIVE</span>
+            </div>
+            <div class="rate-bar-prices">
+                <div class="rate-bar-price-item">
+                    <span class="rate-bar-symbol">BTC/CNY</span>
+                    <span id="btc-price-cny" class="rate-bar-value">加载中...</span>
+                </div>
+                <div class="rate-bar-divider"></div>
+                <div class="rate-bar-price-item">
+                    <span class="rate-bar-symbol">BTC/USD</span>
+                    <span id="btc-price-usd" class="rate-bar-value">加载中...</span>
+                </div>
+            </div>
+            <div class="rate-bar-calc">
+                <div class="rate-bar-calc-item">
+                    <label for="calc-btc">BTC</label>
+                    <input type="text" id="calc-btc" placeholder="0.00000000" inputmode="decimal" autocomplete="off">
+                </div>
+                <div class="rate-bar-calc-item">
+                    <label for="calc-cny">CNY</label>
+                    <input type="text" id="calc-cny" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                </div>
+                <div class="rate-bar-calc-item">
+                    <label for="calc-usd">USD</label>
+                    <input type="text" id="calc-usd" placeholder="0.00" inputmode="decimal" autocomplete="off">
+                </div>
+            </div>
+            <div class="rate-bar-time">更新于: <span id="price-update-time">-</span></div>
+        </div>
+
         <!-- 导航卡片区域 -->
          <main class="main-content">
              <div class="cards-grid">
-                 <!-- 0. 比特币汇率 -->
-                 <div class="card card-pinned exchange-rate-card">
-                     <span class="card-pin-label">实时数据</span>
-                     <div class="card-header">
-                         <div class="card-icon">💰</div>
-                         <h3 class="card-title">比特币汇率</h3>
-                     </div>
-                     <div class="price-simple">
-                         <span id="btc-price-cny" class="price-main">加载中...</span>
-                         <span id="btc-price-usd" class="price-sub"></span>
-                     </div>
-                     <div class="calculator-compact">
-                         <div class="calc-item">
-                             <label for="calc-btc">BTC</label>
-                             <input type="text" id="calc-btc" placeholder="0.00000000" inputmode="decimal" autocomplete="off">
-                         </div>
-                         <div class="calc-item">
-                             <label for="calc-cny">CNY</label>
-                             <input type="text" id="calc-cny" placeholder="0.00" inputmode="decimal" autocomplete="off">
-                         </div>
-                         <div class="calc-item">
-                             <label for="calc-usd">USD</label>
-                             <input type="text" id="calc-usd" placeholder="0.00" inputmode="decimal" autocomplete="off">
-                         </div>
-                     </div>
-                     <div class="price-update-tiny">更新于: <span id="price-update-time">-</span></div>
-                 </div>
-
                  <!-- 1. 比特囤币Blog -->
                  <a href="https://blog.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">

@@ -447,21 +447,17 @@ function parseValue(val) {
 }
 
 function updatePriceDisplay() {
-    const btcInput = document.getElementById('calc-btc');
     const cnyDisplay = document.getElementById('btc-price-cny');
     const usdDisplay = document.getElementById('btc-price-usd');
     const timeElement = document.getElementById('price-update-time');
     
-    const amount = parseValue(btcInput.value) || 0;
-    
+    // 显示 1 BTC 的价格
     if (cnyDisplay && btcToCny > 0) {
-        const cnyTotal = amount * btcToCny;
-        cnyDisplay.innerText = "¥" + cnyTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        cnyDisplay.innerText = "¥" + btcToCny.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
     
     if (usdDisplay && btcToUsd > 0) {
-        const usdTotal = amount * btcToUsd;
-        usdDisplay.innerText = "/ $" + usdTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        usdDisplay.innerText = "$" + btcToUsd.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 
     if (timeElement) {
