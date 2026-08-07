@@ -345,7 +345,7 @@ body::before {
 /* ===== 工具区域三列并排布局 ===== */
 .tools-row {
     display: grid;
-    grid-template-columns: 1.3fr 1fr 0.9fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
     padding: 20px 0;
     animation: fadeInUp 0.9s ease-out;
@@ -675,33 +675,41 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 16px 20px;
+    gap: 10px;
+    padding: 14px 16px;
     background: rgba(255, 153, 0, 0.05);
     border-radius: 10px;
     border: 2px solid rgba(255, 153, 0, 0.15);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     position: relative;
+    width: 100%;
+    max-width: 320px;
 }
 
 .sponsor-label-bottom {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: var(--text-primary);
+    flex-shrink: 0;
 }
 
 .sponsor-address-bottom {
     font-family: 'Courier New', Courier, monospace;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--accent-color);
     cursor: pointer;
-    padding: 6px 10px;
+    padding: 4px 8px;
     border-radius: 6px;
     transition: all 0.3s ease;
     position: relative;
     user-select: none;
     font-weight: 600;
-    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+    display: inline-block;
 }
 
 .sponsor-address-bottom:hover {
@@ -1158,6 +1166,38 @@ body::before {
     margin-top: 20px;
 }
 
+/* ===== 推荐突出卡片（温和高亮） ===== */
+.card-featured {
+    border-color: rgba(255, 153, 0, 0.3);
+    background: linear-gradient(135deg, #FFFDF7 0%, #FFFFFF 60%, #FFFDF7 100%);
+}
+
+.card-featured::before {
+    transform: scaleX(1);
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
+}
+
+.card-featured-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-color);
+    background: rgba(255, 153, 0, 0.08);
+    border: 1px solid rgba(255, 153, 0, 0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+    z-index: 2;
+    user-select: none;
+}
+
+.card-featured .card-icon {
+    filter: drop-shadow(0 2px 4px rgba(255, 153, 0, 0.15));
+}
+
 /* ===== 占位卡片 ===== */
 .card-placeholder {
     background: #F5F5F5;
@@ -1325,7 +1365,7 @@ body::before {
     }
 
     .tools-row {
-        grid-template-columns: 1.2fr 1fr 0.9fr;
+        grid-template-columns: 1fr 1fr 1fr;
         gap: 16px;
     }
 }
