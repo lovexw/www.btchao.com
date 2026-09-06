@@ -998,7 +998,7 @@ body::before {
 
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px 0;
 }
@@ -1241,6 +1241,16 @@ body::before {
     margin: 6px 0;
 }
 
+.footer-about {
+    max-width: 640px;
+    margin: 0 auto 14px;
+    line-height: 1.8;
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: justify;
+    text-align-last: center;
+}
+
 .footer-note {
     font-style: italic;
     opacity: 0.8;
@@ -1360,7 +1370,7 @@ body::before {
 /* ===== 响应式设计 ===== */
 @media (max-width: 1200px) {
     .cards-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
     }
 

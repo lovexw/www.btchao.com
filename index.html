@@ -3,9 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="比特币导航 - 精选比特币相关工具与资源导航">
-    <meta name="keywords" content="比特币,Bitcoin,BTC,导航,工具,白皮书,定投">
-    <title>比特币导航 - Bitcoin Navigation</title>
+
+    <!-- ===== SEO 基础标签 ===== -->
+    <title>比特币导航 - 精选BTC工具、白皮书、定投指数与每日行情 | 比特囤币</title>
+    <meta name="description" content="比特币导航（btchao.com）为比特币长期主义者精选实用工具与资源：比特币白皮书、AHR999定投指数、DCA定投回测、实时BTC/CNY/USD行情换算、冷钱包教程、BIP39离线助记词、每日比特币新闻与链上地址查询，一站式比特币工具入口。">
+    <meta name="keywords" content="比特币导航,BTC工具,比特币白皮书,AHR999指数,定投策略,DCA定投,比特币汇率换算,冷钱包教程,BIP39助记词,比特币新闻,囤币,Bitcoin">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="author" content="btchao.com">
+    <link rel="canonical" href="https://www.btchao.com/">
+
+    <!-- ===== Open Graph 社交分享（微信/微博/QQ/TG） ===== -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="比特币导航">
+    <meta property="og:title" content="比特币导航 - 精选BTC工具、白皮书、定投指数与每日行情">
+    <meta property="og:description" content="白皮书、AHR999定投指数、实时行情换算、冷钱包教程、每日比特币新闻——比特币长期主义者的一站式工具入口。">
+    <meta property="og:url" content="https://www.btchao.com/">
+    <meta property="og:image" content="https://www.btchao.com/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="比特币导航 - 精选比特币工具与资源">
+    <meta property="og:locale" content="zh_CN">
+
+    <!-- ===== Twitter Card ===== -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="比特币导航 - 精选BTC工具、白皮书、定投指数与每日行情">
+    <meta name="twitter:description" content="白皮书、AHR999定投指数、实时行情换算、冷钱包教程、每日比特币新闻——比特币长期主义者的一站式工具入口。">
+    <meta name="twitter:image" content="https://www.btchao.com/og-image.png">
+
+    <!-- ===== 图标 & PWA ===== -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#FF9900">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- ===== 性能优化：提前建立关键第三方连接 ===== -->
+    <link rel="preconnect" href="https://api.coingecko.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://tc.xiaowuleyi.com">
+    <link rel="dns-prefetch" href="https://ly.btchao.com">
+
+    <!-- ===== 结构化数据（Schema.org） ===== -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://www.btchao.com/#website",
+                "url": "https://www.btchao.com/",
+                "name": "比特币导航",
+                "alternateName": "比特囤币导航",
+                "description": "精选比特币相关工具与资源的导航站，收录白皮书、定投指数、行情换算、冷钱包教程与每日新闻。",
+                "inLanguage": "zh-CN",
+                "isAccessibleForFree": true
+            },
+            {
+                "@type": "CollectionPage",
+                "@id": "https://www.btchao.com/#webpage",
+                "url": "https://www.btchao.com/",
+                "name": "比特币导航 - 精选BTC工具、白皮书、定投指数与每日行情",
+                "isPartOf": { "@id": "https://www.btchao.com/#website" },
+                "inLanguage": "zh-CN",
+                "mainEntity": { "@id": "https://www.btchao.com/#itemlist" }
+            },
+            {
+                "@type": "ItemList",
+                "@id": "https://www.btchao.com/#itemlist",
+                "name": "比特币工具与资源导航",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1,  "name": "比特囤币Blog", "url": "https://blog.btchao.com" },
+                    { "@type": "ListItem", "position": 2,  "name": "比特币白皮书", "url": "https://paper.btchao.com" },
+                    { "@type": "ListItem", "position": 3,  "name": "比特币百科", "url": "https://wiki.btchao.com" },
+                    { "@type": "ListItem", "position": 4,  "name": "比特币每日新闻", "url": "https://news.btchao.com" },
+                    { "@type": "ListItem", "position": 5,  "name": "比特币大事记", "url": "https://timeline.btchao.com" },
+                    { "@type": "ListItem", "position": 6,  "name": "AHR999指数", "url": "https://ahr.btchao.com" },
+                    { "@type": "ListItem", "position": 7,  "name": "DCA定投", "url": "https://dca.btchao.com" },
+                    { "@type": "ListItem", "position": 8,  "name": "定投策略回报率对比", "url": "https://ahr-dca.btchao.com" },
+                    { "@type": "ListItem", "position": 9,  "name": "比特币均线面板", "url": "https://ma.btchao.com" },
+                    { "@type": "ListItem", "position": 10, "name": "购买比特币", "url": "https://buy.btchao.com" },
+                    { "@type": "ListItem", "position": 11, "name": "BIP39助记词生成", "url": "https://bip39.btchao.com" },
+                    { "@type": "ListItem", "position": 12, "name": "比特币冷钱包教程", "url": "https://cold-wallet.btchao.com" },
+                    { "@type": "ListItem", "position": 13, "name": "比特币预言收录", "url": "https://yy.btchao.com" },
+                    { "@type": "ListItem", "position": 14, "name": "密码随机生成", "url": "https://pd.btchao.com" },
+                    { "@type": "ListItem", "position": 15, "name": "比特币投资日记", "url": "https://log.btchao.com" },
+                    { "@type": "ListItem", "position": 16, "name": "比特币·量子计算威胁", "url": "https://quantum.btchao.com" }
+                ]
+            }
+        ]
+    }
+    </script>
+
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -133,7 +221,7 @@
                         <span class="sponsor-label-bottom">BTC</span>
                         <span class="sponsor-address-bottom" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
                             3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
-                            <img class="sponsor-qrcode-bottom" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC地址二维码">
+                            <img class="sponsor-qrcode-bottom" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC赞助地址二维码" width="150" height="150" loading="lazy" decoding="async">
                         </span>
                     </div>
                     <div class="sponsor-copy-toast-bottom hidden" id="sponsor-copy-toast-bottom">✓ 地址已复制</div>
@@ -215,7 +303,19 @@
                      </div>
                  </a>
 
-                 <!-- 4. 比特币大事记 -->
+                 <!-- 4. 比特币每日新闻 -->
+                 <a href="https://news.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
+                     <div class="card-header">
+                         <div class="card-icon">📰</div>
+                         <h3 class="card-title">比特币每日新闻</h3>
+                     </div>
+                     <p class="card-description">与比特币高度相关的新闻，每30分钟更新，可以适当关注</p>
+                     <div class="card-footer">
+                         <span class="card-link">阅读 →</span>
+                     </div>
+                 </a>
+
+                 <!-- 5. 比特币大事记 -->
                  <a href="https://timeline.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">📅</div>
@@ -227,7 +327,7 @@
                      </div>
                  </a>
 
-                 <!-- 5. AHR999指数 -->
+                 <!-- 6. AHR999指数 -->
                  <a href="https://ahr.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">📊</div>
@@ -239,7 +339,7 @@
                      </div>
                  </a>
 
-                 <!-- 6. DCA定投 -->
+                 <!-- 7. DCA定投 -->
                  <a href="https://dca.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">💰</div>
@@ -251,7 +351,7 @@
                      </div>
                  </a>
 
-                 <!-- 7. 定投策略回报率对比 -->
+                 <!-- 8. 定投策略回报率对比 -->
                  <a href="https://ahr-dca.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">📈</div>
@@ -263,7 +363,7 @@
                      </div>
                  </a>
 
-                 <!-- 8. 比特币均线面板 -->
+                 <!-- 9. 比特币均线面板 -->
                  <a href="https://ma.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">📊</div>
@@ -275,7 +375,7 @@
                      </div>
                  </a>
 
-                 <!-- 9. 如何购买比特币（中国大陆）- 含免责声明 -->
+                 <!-- 10. 如何购买比特币（中国大陆）- 含免责声明 -->
                  <a href="https://buy.btchao.com" class="card card-disclaimer" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">🛒</div>
@@ -288,7 +388,7 @@
                      </div>
                  </a>
 
-                 <!-- 10. 比特币助记词生成 -->
+                 <!-- 11. 比特币助记词生成 -->
                  <a href="https://bip39.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">🔐</div>
@@ -300,7 +400,7 @@
                      </div>
                  </a>
 
-                 <!-- 11. 比特币冷钱包教程 -->
+                 <!-- 12. 比特币冷钱包教程 -->
                  <a href="https://cold-wallet.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
                      <div class="card-header">
                          <div class="card-icon">🛡️</div>
@@ -309,18 +409,6 @@
                      <p class="card-description">关于比特币冷钱包的具体制作步骤，手机端，电脑端全包含，内容详细，请务必先尝试测试。</p>
                      <div class="card-footer">
                          <span class="card-link">学习 →</span>
-                     </div>
-                 </a>
-
-                 <!-- 12. 比特币每日新闻 -->
-                 <a href="https://news.btchao.com" class="card" target="_blank" rel="noopener noreferrer">
-                     <div class="card-header">
-                         <div class="card-icon">📰</div>
-                         <h3 class="card-title">比特币每日新闻</h3>
-                     </div>
-                     <p class="card-description">与比特币高度相关的新闻，每30分钟更新，可以适当关注</p>
-                     <div class="card-footer">
-                         <span class="card-link">阅读 →</span>
                      </div>
                  </a>
 
@@ -376,6 +464,11 @@
 
         <!-- 页脚 -->
         <footer class="footer">
+            <p class="footer-about">
+                比特币导航（btchao.com）是面向比特币长期主义者的工具与资源导航站，收录比特币白皮书、技术百科、
+                AHR999 定投指数、DCA 定投回测、实时 BTC 汇率换算、冷钱包教程、BIP39 助记词工具、每日比特币新闻等精选内容，
+                助你一站式获取比特币学习与囤币所需的全部工具。
+            </p>
             <p>© 2026 愿你穿越牛熊周期，归来仍是囤币少年。</p>
             <p class="footer-note">Bitcoin: A Peer-to-Peer Electronic Cash System</p>
             <p class="footer-disclaimer">
