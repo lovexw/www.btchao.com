@@ -671,49 +671,68 @@ body::before {
     line-height: 1.5;
 }
 
-.sponsor-address-box-bottom {
+.sponsor-card-main {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 14px 16px;
-    background: rgba(255, 153, 0, 0.05);
-    border-radius: 10px;
-    border: 2px solid rgba(255, 153, 0, 0.15);
-    flex-wrap: nowrap;
-    position: relative;
+    gap: 14px;
     width: 100%;
-    max-width: 320px;
+    max-width: 340px;
+}
+
+.sponsor-qrcode-wrap {
+    flex-shrink: 0;
+    background: #ffffff;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px var(--card-shadow);
+}
+
+.sponsor-qrcode-bottom {
+    display: block;
+    width: 92px;
+    height: 92px;
+    border-radius: 6px;
+}
+
+.sponsor-address-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .sponsor-label-bottom {
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--text-primary);
-    flex-shrink: 0;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    text-align: left;
 }
 
 .sponsor-address-bottom {
+    display: block;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 12px;
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 700;
     color: var(--accent-color);
+    background: rgba(255, 153, 0, 0.06);
+    border: 1px dashed rgba(255, 153, 0, 0.35);
+    border-radius: 8px;
+    padding: 8px 10px;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 6px;
     transition: all 0.3s ease;
-    position: relative;
-    user-select: none;
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1;
-    min-width: 0;
-    display: inline-block;
+    user-select: all;
+    word-break: break-all;
+    white-space: normal;
+    text-align: left;
 }
 
 .sponsor-address-bottom:hover {
-    background: rgba(255, 153, 0, 0.1);
+    background: rgba(255, 153, 0, 0.12);
+    border-color: var(--accent-color);
     transform: translateY(-1px);
 }
 
@@ -721,26 +740,31 @@ body::before {
     transform: translateY(0);
 }
 
-.sponsor-qrcode-bottom {
-    position: absolute;
-    top: 50%;
-    left: calc(100% + 10px);
-    transform: translateY(-50%);
-    width: 150px;
-    height: 150px;
+.sponsor-copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    padding: 9px 12px;
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    color: #ffffff;
+    border: none;
     border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    border: 3px solid white;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 1000;
-    pointer-events: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
 }
 
-.sponsor-address-bottom:hover .sponsor-qrcode-bottom {
-    opacity: 1;
-    visibility: visible;
+.sponsor-copy-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 153, 0, 0.4);
+}
+
+.sponsor-copy-btn:active {
+    transform: translateY(0);
 }
 
 .sponsor-copy-toast-bottom {
@@ -915,6 +939,11 @@ body::before {
 @media (max-width: 968px) {
     .tools-row {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
     }
 
@@ -1368,7 +1397,8 @@ body::before {
 }
 
 /* ===== 响应式设计 ===== */
-@media (max-width: 1200px) {
+/* 平板区间：与移动端 ≤968px 的 tools-row 单列规则衔接，避免同权重覆盖 */
+@media (max-width: 1200px) and (min-width: 969px) {
     .cards-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
@@ -1991,19 +2021,13 @@ button.waline-submit:disabled {
 
 /* ===== 底部赞助支持响应式样式 ===== */
 @media (max-width: 768px) {
+    .sponsor-card-main {
+        max-width: 420px;
+    }
+
     .sponsor-qrcode-bottom {
-        left: 50%;
-        top: calc(100% + 10px);
-        transform: translateX(-50%);
-    }
-
-    .sponsor-address-bottom:hover .sponsor-qrcode-bottom {
-        transform: translateX(-50%) translateY(0);
-    }
-
-    .sponsor-address-box-bottom {
-        flex-direction: column;
-        text-align: center;
+        width: 84px;
+        height: 84px;
     }
 
     .sponsor-address-bottom {
@@ -2047,21 +2071,26 @@ button.waline-submit:disabled {
         margin-bottom: 16px;
     }
 
-    .sponsor-address-box-bottom {
-        padding: 12px 16px;
+    .sponsor-card-main {
+        gap: 12px;
     }
 
-    .sponsor-label-bottom {
-        font-size: 12px;
+    .sponsor-qrcode-bottom {
+        width: 76px;
+        height: 76px;
+    }
+
+    .sponsor-qrcode-wrap {
+        padding: 5px;
     }
 
     .sponsor-address-bottom {
         font-size: 11px;
     }
 
-    .sponsor-qrcode-bottom {
-        width: 120px;
-        height: 120px;
+    .sponsor-copy-btn {
+        padding: 8px 12px;
+        font-size: 12px;
     }
 }
 
@@ -2201,9 +2230,28 @@ button.waline-submit:disabled {
         gap: 12px;
         padding: 12px 14px;
     }
+    .rate-bar-prices {
+        flex: 1;
+        justify-content: space-evenly;
+        gap: 10px;
+    }
     .rate-bar-calc {
-        width: 100%;
+        /* flex-basis 100% 强制独占一行（width 会被基础样式的 flex-basis:0% 覆盖） */
+        flex: 1 1 100%;
         justify-content: flex-start;
+    }
+    /* 三个换算输入框平分整行宽度，输入空间最大化 */
+    .rate-bar-calc-item {
+        flex: 1;
+        min-width: 0;
+    }
+    .rate-bar-calc-item input {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+    }
+    .rate-bar-calc-item label {
+        width: 26px;
     }
     .rate-bar-time {
         margin-left: 0;
@@ -2213,12 +2261,22 @@ button.waline-submit:disabled {
 }
 
 @media (max-width: 480px) {
+    .rate-bar {
+        padding: 12px;
+        gap: 10px;
+    }
     .rate-bar-value {
         font-size: 14px;
     }
+    .rate-bar-price-item {
+        min-width: 0;
+    }
     .rate-bar-calc-item input {
-        width: 60px;
         font-size: 13px;
+        padding: 2px;
+    }
+    .rate-bar-time {
+        font-size: 9px;
     }
 }
 

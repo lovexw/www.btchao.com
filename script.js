@@ -404,39 +404,120 @@ function showSponsorCopyToast(toastElement) {
 let btcToUsd = 0;
 let btcToCny = 0;
 let lastSource = 'btc';
+let usdToCnyRate = 0; // 0 表示尚未获取到真实汇率
+let lastPriceSourceName = '';
+const USD_CNY_FALLBACK = 7.20;
 
-async function fetchBtcPrice() {
+// 带 6 秒超时的 fetch，避免单个行情源卡住整个页面
+function fetchWithTimeout(url, ms = 6000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    return fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timer));
+}
+
+// 美元兑人民币汇率：免费汇率接口，失败时用估算值兜底
+async function fetchUsdCnyRate() {
     try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
+        const response = await fetchWithTimeout('https://open.er-api.com/v6/latest/USD');
         const data = await response.json();
-        
-        if (data && data.bitcoin) {
-            btcToUsd = data.bitcoin.usd;
-            btcToCny = data.bitcoin.cny;
-            
-            // 初始加载或定时刷新时更新
-            if (!document.activeElement || !['calc-btc', 'calc-cny', 'calc-usd'].includes(document.activeElement.id)) {
-                updateCalculatorValues(lastSource);
+        if (data && data.rates && data.rates.CNY > 5 && data.rates.CNY < 10) {
+            usdToCnyRate = data.rates.CNY;
+            // 汇率晚于价格到达时，立即用真实汇率重算 CNY 展示与计算器
+            if (btcToUsd > 0 && lastPriceSourceName !== 'CoinGecko') {
+                btcToCny = btcToUsd * usdToCnyRate;
+                updatePriceDisplay();
+                if (!document.activeElement || !['calc-btc', 'calc-cny', 'calc-usd'].includes(document.activeElement.id)) {
+                    updateCalculatorValues(lastSource);
+                }
             }
-            
-            updatePriceDisplay();
         }
     } catch (error) {
-        console.warn('CoinGecko 失败，尝试 Binance');
+        if (!usdToCnyRate) usdToCnyRate = USD_CNY_FALLBACK;
+    }
+}
+
+// 行情源按国内可达性优先排序：OKX / HTX 国内可直连，Gate / Binance / CoinGecko 兜底
+const PRICE_SOURCES = [
+    {
+        name: 'OKX',
+        getUsd: async () => {
+            const r = await fetchWithTimeout('https://www.okx.com/api/v5/market/ticker?instId=BTC-USDT');
+            const d = await r.json();
+            const px = parseFloat(d && d.data && d.data[0] && d.data[0].last);
+            if (!px) throw new Error('bad data');
+            return px;
+        }
+    },
+    {
+        name: 'HTX',
+        getUsd: async () => {
+            const r = await fetchWithTimeout('https://api.htx.com/market/detail/merged?symbol=btcusdt');
+            const d = await r.json();
+            const px = parseFloat(d && d.tick && d.tick.close);
+            if (!px) throw new Error('bad data');
+            return px;
+        }
+    },
+    {
+        name: 'Gate',
+        getUsd: async () => {
+            const r = await fetchWithTimeout('https://api.gateio.ws/api/v4/spot/tickers?currency_pair=BTC_USDT');
+            const d = await r.json();
+            const px = parseFloat(d && d[0] && d[0].last);
+            if (!px) throw new Error('bad data');
+            return px;
+        }
+    },
+    {
+        name: 'Binance',
+        getUsd: async () => {
+            const r = await fetchWithTimeout('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+            const d = await r.json();
+            const px = parseFloat(d.price);
+            if (!px) throw new Error('bad data');
+            return px;
+        }
+    },
+    {
+        // CoinGecko 直接返回 USD 与 CNY 两种计价，作为最终兜底
+        name: 'CoinGecko',
+        getUsd: async () => {
+            const r = await fetchWithTimeout('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd,cny');
+            const d = await r.json();
+            const usd = d && d.bitcoin && d.bitcoin.usd;
+            if (!usd) throw new Error('bad data');
+            if (d.bitcoin.cny) btcToCny = d.bitcoin.cny;
+            return usd;
+        }
+    }
+];
+
+async function fetchBtcPrice() {
+    // 汇率未获取时异步补拉（失败不影响行情展示，用估算值）
+    if (!usdToCnyRate) {
+        fetchUsdCnyRate();
+    }
+
+    for (const source of PRICE_SOURCES) {
         try {
-            const response = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
-            const binanceData = await response.json();
-            btcToUsd = parseFloat(binanceData.price);
-            btcToCny = btcToUsd * 7.23; // 估算汇率
-            
+            const usd = await source.getUsd();
+            btcToUsd = usd;
+            lastPriceSourceName = source.name;
+            // 非 CoinGecko 源只返回 USD 价，CNY 用实时汇率换算
+            if (source.name !== 'CoinGecko') {
+                btcToCny = usd * (usdToCnyRate || USD_CNY_FALLBACK);
+            }
+
             if (!document.activeElement || !['calc-btc', 'calc-cny', 'calc-usd'].includes(document.activeElement.id)) {
                 updateCalculatorValues(lastSource);
             }
             updatePriceDisplay();
-        } catch (e) {
-            console.error('所有价格 API 均失效');
+            return;
+        } catch (error) {
+            console.warn(`行情源 ${source.name} 失败，切换下一个`);
         }
     }
+    console.error('所有行情源均失效，保留上次显示的价格');
 }
 
 function parseValue(val) {
@@ -461,7 +542,9 @@ function updatePriceDisplay() {
     }
 
     if (timeElement) {
-        timeElement.innerText = new Date().toLocaleTimeString();
+        timeElement.innerText = lastPriceSourceName
+            ? `${new Date().toLocaleTimeString()} · ${lastPriceSourceName}`
+            : new Date().toLocaleTimeString();
     }
 }
 

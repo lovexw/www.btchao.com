@@ -38,7 +38,10 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <!-- ===== 性能优化：提前建立关键第三方连接 ===== -->
-    <link rel="preconnect" href="https://api.coingecko.com" crossorigin>
+    <link rel="preconnect" href="https://www.okx.com" crossorigin>
+    <link rel="preconnect" href="https://api.htx.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.gateio.ws">
+    <link rel="dns-prefetch" href="https://open.er-api.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://tc.xiaowuleyi.com">
     <link rel="dns-prefetch" href="https://ly.btchao.com">
@@ -216,13 +219,19 @@
                         <span class="sponsor-icon-bottom">💝</span>
                         <h2>赞助支持</h2>
                     </div>
-                    <p class="sponsor-description-bottom">欢迎走过路过的朋友，赞助支持本站长久运行</p>
-                    <div class="sponsor-address-box-bottom">
-                        <span class="sponsor-label-bottom">BTC</span>
-                        <span class="sponsor-address-bottom" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv">
-                            3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv
-                            <img class="sponsor-qrcode-bottom" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC赞助地址二维码" width="150" height="150" loading="lazy" decoding="async">
-                        </span>
+                    <p class="sponsor-description-bottom">如果本站对你有帮助，欢迎赞助支持长久运行</p>
+                    <div class="sponsor-card-main">
+                        <div class="sponsor-qrcode-wrap">
+                            <img class="sponsor-qrcode-bottom" src="https://tc.xiaowuleyi.com/file/1763893479341_image.png" alt="BTC赞助地址二维码" width="92" height="92" loading="lazy" decoding="async">
+                        </div>
+                        <div class="sponsor-address-area">
+                            <span class="sponsor-label-bottom">BTC 赞助地址（点击按钮复制）</span>
+                            <code class="sponsor-address-bottom" onclick="copySponsorAddress()" data-address="3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv" title="点击复制完整地址">3KLy733p6vQDyaKdEY61iGdQPf9pYt9hPv</code>
+                            <button class="sponsor-copy-btn" onclick="copySponsorAddress()">
+                                <span class="btn-icon">📋</span>
+                                <span class="btn-text">复制地址</span>
+                            </button>
+                        </div>
                     </div>
                     <div class="sponsor-copy-toast-bottom hidden" id="sponsor-copy-toast-bottom">✓ 地址已复制</div>
                 </div>
