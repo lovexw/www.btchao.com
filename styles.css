@@ -1113,6 +1113,14 @@ body::before {
     transform: scale(1.08);
 }
 
+.card-icon-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    display: inline-block;
+}
+
 .card-title {
     font-size: 17px;
     font-weight: 700;
